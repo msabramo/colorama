@@ -2,35 +2,35 @@
 import re
 import sys
 
-from .ansi import AnsiFore, AnsiBack, AnsiIntensity
-from .winterm import Color, Intensity, WinTerm
+from .ansi import AnsiFore, AnsiBack, AnsiStyle
+from .winterm import WinColor, WinStyle, WinTerm
 
 
 winterm = WinTerm()
 
 win32_calls = {
-    # Style.RESET_ALL: winterm.reset_all,
-    # Style.BRIGHT: lambda: winterm.intensity(Intensity.BRIGHT),
-    # Style.DIM: lambda: winterm.intensity(Intensity.DIM),
-    # Style.NORMAL: lambda: winterm.intensity(Intensity.NORMAL),
-    AnsiFore.BLACK: lambda: winterm.fore(Color.BLACK),
-    AnsiFore.RED: lambda: winterm.fore(Color.RED),
-    AnsiFore.GREEN: lambda: winterm.fore(Color.GREEN),
-    AnsiFore.YELLOW: lambda: winterm.fore(Color.YELLOW),
-    AnsiFore.BLUE: lambda: winterm.fore(Color.BLUE),
-    AnsiFore.MAGENTA: lambda: winterm.fore(Color.MAGENTA),
-    AnsiFore.CYAN: lambda: winterm.fore(Color.CYAN),
-    AnsiFore.WHITE: lambda: winterm.fore(Color.GREY),
+    AnsiStyle.RESET_ALL: winterm.reset_all,
+    AnsiStyle.BRIGHT: lambda: winterm.style(WinStyle.BRIGHT),
+    AnsiStyle.DIM: lambda: winterm.style(WinStyle.DIM),
+    AnsiStyle.NORMAL: lambda: winterm.style(WinStyle.NORMAL),
+    AnsiFore.BLACK: lambda: winterm.fore(WinColor.BLACK),
+    AnsiFore.RED: lambda: winterm.fore(WinColor.RED),
+    AnsiFore.GREEN: lambda: winterm.fore(WinColor.GREEN),
+    AnsiFore.YELLOW: lambda: winterm.fore(WinColor.YELLOW),
+    AnsiFore.BLUE: lambda: winterm.fore(WinColor.BLUE),
+    AnsiFore.MAGENTA: lambda: winterm.fore(WinColor.MAGENTA),
+    AnsiFore.CYAN: lambda: winterm.fore(WinColor.CYAN),
+    AnsiFore.WHITE: lambda: winterm.fore(WinColor.GREY),
     AnsiFore.RESET: lambda: winterm.fore(),
-    # Ansi.BLACK: lambda: winterm.back(Color.BLACK),
-    # Ansi.RED: lambda: winterm.back(Color.RED),
-    # Ansi.GREEN: lambda: winterm.back(Color.GREEN),
-    # Ansi.YELLOW: lambda: winterm.back(Color.YELLOW),
-    # Ansi.BLUE: lambda: winterm.back(Color.BLUE),
-    # Ansi.MAGENTA: lambda: winterm.back(Color.MAGENTA),
-    # Ansi.CYAN: lambda: winterm.back(Color.CYAN),
-    # Ansi.WHITE: lambda: winterm.back(Color.GREY),
-    # Ansi.DEFAULT: lambda: winterm.back(Color.DEFAULT),
+    AnsiBack.BLACK: lambda: winterm.back(WinColor.BLACK),
+    AnsiBack.RED: lambda: winterm.back(WinColor.RED),
+    AnsiBack.GREEN: lambda: winterm.back(WinColor.GREEN),
+    AnsiBack.YELLOW: lambda: winterm.back(WinColor.YELLOW),
+    AnsiBack.BLUE: lambda: winterm.back(WinColor.BLUE),
+    AnsiBack.MAGENTA: lambda: winterm.back(WinColor.MAGENTA),
+    AnsiBack.CYAN: lambda: winterm.back(WinColor.CYAN),
+    AnsiBack.WHITE: lambda: winterm.back(WinColor.GREY),
+    AnsiBack.RESET: lambda: winterm.back(),
 }
 
 
@@ -88,5 +88,4 @@ class AnsiToWin32(object):
             for param in params:
                 if param in win32_calls:
                     win32_calls[param]()
-        
 

@@ -38,14 +38,13 @@ class AnsiBack:
     WHITE   = 47
     RESET   = 49
 
-class AnsiIntensity:
+class AnsiStyle:
     BRIGHT    = 1
     DIM       = 2
     NORMAL    = 22
-
-RESET_ALL = code_to_chars(0)
+    RESET_ALL = 0
 
 Fore = AnsiCodes( AnsiFore )
 Back = AnsiCodes( AnsiBack )
-Intensity = AnsiCodes( AnsiIntensity )
+Style = AnsiCodes( AnsiStyle )
 

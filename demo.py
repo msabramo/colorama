@@ -2,14 +2,16 @@
 
 import sys
 
-from colorama import init, Fore, Back, Intensity, RESET_ALL
+from colorama import init, Fore, Back, Style
 
 init()
 
 print Fore.GREEN + 'green' + Fore.RED + 'red' + Fore.RESET + 'normal'
 print Back.GREEN + 'green' + Back.RED + 'red' + Back.RESET + 'normal'
-print Intensity.DIM+ 'dim' + Intensity.NORMAL + 'normal' + Intensity.BRIGHT + 'bright'
-print Intensity.NORMAL
+print Style.DIM + 'dim',
+print Style.NORMAL + 'normal',
+print Style.BRIGHT + 'bright'
+print Style.NORMAL
 
 FORES = [
     Fore.BLACK,
@@ -33,21 +35,25 @@ BACKS = [
     Back.CYAN,
     Back.WHITE,
 ]
-INTENSITIES = [
-    Intensity.DIM,
-    Intensity.NORMAL,
-    Intensity.BRIGHT,
+STYLES = [
+    Style.DIM,
+    Style.NORMAL,
+    Style.BRIGHT,
 ]
 
 # use stdout.write to write chars with no newline nor spaces between them
 for background in BACKS:
     sys.stdout.write(background)
-    for foreground in FORES:
-        sys.stdout.write(foreground)
-        for inten in INTENSITIES:
-            sys.stdout.write(inten)
 
-            sys.stdout.write('X')
+    for inten in STYLES:
+        sys.stdout.write(inten)
 
-    print RESET_ALL
+        for foreground in FORES:
+            sys.stdout.write(foreground)
+
+            sys.stdout.write('XX')
+
+        sys.stdout.write(' ')
+
+    print Style.RESET_ALL
 
