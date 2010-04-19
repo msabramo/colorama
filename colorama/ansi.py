@@ -5,6 +5,8 @@ See: http://en.wikipedia.org/wiki/ANSI_escape_code
 
 CSI = '\033['
 
+def code_to_chars(code):
+    return CSI + str(code) + 'm'
 
 class AnsiCodes(object):
 
@@ -12,17 +14,7 @@ class AnsiCodes(object):
         for name in dir(codes):
             if not name.startswith('_'):
                 value = getattr(codes, name)
-                setattr(self, name, self.code_to_chars(value))
-
-    def code_to_chars(self, code):
-        return CSI + str(code) + 'm'
-
-
-class AnsiStyle:
-    RESET_ALL = 0
-    BRIGHT    = 1
-    DIM       = 2
-    NORMAL    = 22
+                setattr(self, name, code_to_chars(value))
 
 class AnsiFore:
     BLACK   = 30
@@ -45,22 +37,15 @@ class AnsiBack:
     CYAN    = 46
     WHITE   = 47
     RESET   = 49
-    
+
+class AnsiIntensity:
+    BRIGHT    = 1
+    DIM       = 2
+    NORMAL    = 22
+
+RESET_ALL = code_to_chars(0)
 
 Fore = AnsiCodes( AnsiFore )
-Fore.ALL = [
-    Fore.BLACK, Fore.RED, Fore.GREEN, Fore.YELLOW,
-    Fore.BLUE, Fore.MAGENTA, Fore.CYAN, Fore.WHITE,
-]
-
 Back = AnsiCodes( AnsiBack )
-Back.ALL = [
-    Back.BLACK, Back.RED, Back.GREEN, Back.YELLOW,
-    Back.BLUE, Back.MAGENTA, Back.CYAN, Back.WHITE,
-]
-
-Style = AnsiCodes( AnsiStyle )
-Style.ALL = [
-    Style.DIM, Style.NORMAL, Style.BRIGHT,
-]
+Intensity = AnsiCodes( AnsiIntensity )
 

@@ -2,7 +2,7 @@
 import sys
 from unittest import TestCase, main
 
-from colorama import init, Fore, Back, Style, AnsiToWin32
+from colorama import init, Fore, Back, Intensity, AnsiToWin32
 
 
 stdout_orig = sys.stdout
@@ -22,7 +22,6 @@ class AnsiTest(TestCase):
         sys.stderr = stderr_orig
 
     def testForeAttributes(self):
-        init()
         self.assertEquals(Fore.BLACK, '\033[30m')
         self.assertEquals(Fore.RED, '\033[31m')
         self.assertEquals(Fore.GREEN, '\033[32m')
@@ -47,32 +46,11 @@ class AnsiTest(TestCase):
 
 
     def testStyleAttributes(self):
-        self.assertEquals(Style.DIM, '\033[2m')
-        self.assertEquals(Style.NORMAL, '\033[22m')
-        self.assertEquals(Style.BRIGHT, '\033[1m')
+        self.assertEquals(Intensity.DIM, '\033[2m')
+        self.assertEquals(Intensity.NORMAL, '\033[22m')
+        self.assertEquals(Intensity.BRIGHT, '\033[1m')
 
 
-    def testForeAll(self):
-        expected = [
-            Fore.BLACK, Fore.RED, Fore.GREEN, Fore.YELLOW,
-            Fore.BLUE, Fore.MAGENTA, Fore.CYAN, Fore.WHITE,
-        ]
-        self.assertEquals(Fore.ALL, expected)
-
-
-    def testBackAll(self):
-        expected = [
-            Back.BLACK, Back.RED, Back.GREEN, Back.YELLOW,
-            Back.BLUE, Back.MAGENTA, Back.CYAN, Back.WHITE,
-        ]
-        self.assertEquals(Back.ALL, expected)
-
-
-    def testStyleAll(self):
-        expected = [ Style.DIM, Style.NORMAL, Style.BRIGHT, ]
-        self.assertEquals(Style.ALL, expected)
-
-    
 if __name__ == '__main__':
     main()
 

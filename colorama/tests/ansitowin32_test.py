@@ -3,6 +3,7 @@ from contextlib import contextmanager
 import sys
 from unittest import TestCase, main
 
+import colorama
 from colorama import Fore, AnsiToWin32, winterm
 
 from mock import Mock, patch
@@ -103,7 +104,6 @@ class AnsiToWin32Test(TestCase):
             'abc\033[0;1mdef',
             'abc\033[40;50mdef',
             'abc\033[50;30;40mdef',
-
             'abc\033[Adef',
             'abc\033[0Gdef',
             'abc\033[1;20;128Hdef',
@@ -121,15 +121,16 @@ class AnsiToWin32Test(TestCase):
         stream.write_and_convert( '\033[40m\033[41m' )
         self.assertFalse( stream.wrapped.write.called )
 
-    def testWriteAndConvertCallsWin32WithParamStringAndCommand(self):
+    def testWriteAndConvertCallsWin32WithParamsAndCommand(self):
         stream = AnsiToWin32(Mock())
         stream.call_win32 = Mock()
+        stream.extract_params = Mock(return_value='params')
         data = {
-            'abc\033[adef':         ('', 'a'),
-            'abc\033[;;bdef':       (';;', 'b'),
-            'abc\033[0cdef':        ('0', 'c'),
-            'abc\033[;;0;;Gdef':    (';;0;;', 'G'),
-            'abc\033[1;20;128Hdef': ('1;20;128', 'H'),
+            'abc\033[adef':         ('a', 'params'),
+            'abc\033[;;bdef':       ('b', 'params'),
+            'abc\033[0cdef':        ('c', 'params'),
+            'abc\033[;;0;;Gdef':    ('G', 'params'),
+            'abc\033[1;20;128Hdef': ('H', 'params'),
         }
         for datum, expected in data.iteritems():
             stream.call_win32.reset_mock()
@@ -139,19 +140,31 @@ class AnsiToWin32Test(TestCase):
     def testExtractParams(self):
         stream = AnsiToWin32(Mock())
         data = {
-            '':             (),
-            ';;':           (),
-            '2':            (2,),
-            ';;002;;':      (2,),
-            '0;1':          (0, 1),
-            ';;003;;456;;': (3, 456),
+            '':               (),
+            ';;':             (),
+            '2':              (2,),
+            ';;002;;':        (2,),
+            '0;1':            (0, 1),
+            ';;003;;456;;':   (3, 456),
             '11;22;33;44;55': (11, 22, 33, 44, 55),
         }
         for datum, expected in data.iteritems():
             self.assertEquals(stream.extract_params(datum), expected)
 
-    def testCallWin32(self):
-        self.fail()
+    @patch('colorama.ansitowin32.win32_calls', {})
+    def testCallWin32UsesLookup(self):
+        listener = Mock()
+        colorama.ansitowin32.win32_calls.clear()
+        colorama.ansitowin32.win32_calls.update( {
+            1: lambda: listener(11),
+            2: lambda: listener(22),
+            3: lambda: listener(33),
+        } )
+        stream = AnsiToWin32(Mock())
+        stream.call_win32('m', (3, 1, 99, 2))
+        self.assertEquals(
+            [a[0][0] for a in listener.call_args_list],
+            [33, 11, 22] )
 
 
 if __name__ == '__main__':

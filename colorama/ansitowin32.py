@@ -2,7 +2,7 @@
 import re
 import sys
 
-from .ansi import AnsiFore, AnsiBack, AnsiStyle
+from .ansi import AnsiFore, AnsiBack, AnsiIntensity
 from .winterm import Color, Intensity, WinTerm
 
 
@@ -61,7 +61,9 @@ class AnsiToWin32(object):
             start, end = match.span()
             self.write_snippet(text, cursor, start)
 
-            self.call_win32(*match.groups())
+            paramstring, command = match.groups()
+            params = self.extract_params(paramstring)
+            self.call_win32(command, params)
 
             cursor = end
 
@@ -73,18 +75,18 @@ class AnsiToWin32(object):
             self.wrapped.write(text[start:end])
 
 
-    def call_win32(self, paramstring, command):
+    def extract_params(self, paramstring):
+        def split(paramstring):
+            for p in paramstring.split(';'):
+                if p != '':
+                    yield int(p)
+        return tuple(split(paramstring))
+
+
+    def call_win32(self, command, params):
         if command == 'm':
-            params = self.extract_params(paramstring)
             for param in params:
                 if param in win32_calls:
                     win32_calls[param]()
         
-
-    def extract_params(self, params):
-        def split(text):
-            for p in params.split(';'):
-                if p != '':
-                    yield int(p)
-        return tuple(split(params))
 
