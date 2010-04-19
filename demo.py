@@ -1,51 +1,20 @@
+#! /usr/bin/env python
 
 import sys
 
-from colorama.colorama import wrap, Ansi
+from colorama import init, Fore, Back, Style
 
-fores = [
-    Ansi.BLACK,
-    Ansi.RED,
-    Ansi.GREEN,
-    Ansi.YELLOW,
-    Ansi.BLUE,
-    Ansi.MAGENTA,
-    Ansi.CYAN,
-    Ansi.WHITE,
-]
+init()
 
-backs = [
-    Ansi.BLACK_BG,
-    Ansi.RED_BG,
-    Ansi.GREEN_BG,
-    Ansi.YELLOW_BG,
-    Ansi.BLUE_BG,
-    Ansi.MAGENTA_BG,
-    Ansi.CYAN_BG,
-    Ansi.WHITE_BG,
-]
+print Fore.GREEN + 'green' + Fore.RED + 'red' + Fore.RESET + 'normal'
+print Back.GREEN + 'green' + Back.RED + 'red' + Back.RESET + 'normal'
+print Style.DIM+ 'dim' + Style.NORMAL + 'normal' + Style.BRIGHT + 'bright'
+print Style.NORMAL
 
-styles = [
-    Ansi.DIM,
-    Ansi.NORMAL,
-    Ansi.BRIGHT,
-#    Ansi.UNDERLINE,
-#    Ansi.BLINK,
-#    Ansi.REVERSE,
-#    Ansi.CONCEALED,
-]
-
-
-sys.stdout = wrap(sys.stdout)
-# term = ColorStream(sys.stdout)
-print 'go' + Ansi.RED + 'stop' + Ansi.DEFAULT + 'normal'
-print 'go' + Ansi.RED_BG + 'stop' + Ansi.DEFAULT_BG + 'normal'
-
-for st in styles:
-    for bg in backs:
-        for fg in fores:
+for st in Style.ALL:
+    for bg in Back.ALL:
+        for fg in Fore.ALL:
+            # use stdout.write to write X chars with no space between them
             sys.stdout.write(fg + bg + st + 'X')
-    print
-
-print Ansi.WHITE + Ansi.BLACK_BG + Ansi.NORMAL
+    print Style.RESET_ALL
 

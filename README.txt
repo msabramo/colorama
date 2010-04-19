@@ -58,7 +58,7 @@ Cross-platform printing of colored text can then be done::
     print Fore.RED + 'some red text'
     print Back.GREEN + and with a green background'
     print Style.DIM + 'and in dim text'
-    print + Fore.RESET + Back.RESET + Style.RESET
+    print + Fore.DEFAULT + Back.DEFAULT + Style.DEFAULT
     print 'back to normal now'
 
 or simply by manually printing ANSI sequences from your own code::
@@ -79,11 +79,12 @@ such as Termcolor (http://pypi.python.org/pypi/termcolor)::
 
 Available formatting constants are:
 
-    Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, ALL, RESET.
-    Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, ALL, RESET.
-    Style: DIM, NORMAL, BRIGHT, RESET_ALL
+    Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, ALL, DEFAULT.
+    Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, ALL, DEFAULT.
+    Style: DIM, DEFAULT, BRIGHT, ALL, RESET_ALL
 
-Style.RESET_ALL resets foreground, background and brightness.
+Style.RESET_ALL resets all attributes: foreground, background and brightness.
+Colorama will perform this reset automatically on program exit.
 
 Autoreset
 ---------
@@ -116,6 +117,12 @@ overridden to first perform the ANSI to Win32 conversion on text::
     stream = AnsiToWin32(sys.stderr)
     print >>stream, Fore.BLUE + 'blue text on stderr'    
 
+Development
+===========
+
+Tests require Michael Foord's Mock module. I have been using nose to run the
+tests although they may work without it.
+
 Known Problems
 ==============
 
@@ -123,5 +130,7 @@ Only stdout is currently implimented: stderr is not affected.
 
 Only recognised ANSI escape sequences (ie colors, dim/bright) are filtered out
 of the output text. Unrecognised sequences (eg. moving the text cursor) appear
-as gobbledygook in the output on Windows.
+as gobbledygook in the output on Windows. Ideally, these could be implimented
+using win32 calls too. In the meantime, is it better to filter them out of the
+output?
 

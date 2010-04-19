@@ -40,50 +40,44 @@ for name in dir(AnsiCode):
 
 class ColorStream(object):
 
-    def __init__(self, wrapped):
+    ANSI_RE = re.compile('\033\[(\d+)m')
+
+    def __init__(self, wrapped, autoreset=False):
         self.wrapped = wrapped
+        self.autoreset = autoreset
+        self.enabled = sys.platform.startswith('win')
 
-    def write(self, text):
-        if sys.platform.startswith('win'):
-            for snippet in ansi_to_win32(text):
-                self.wrapped.write(snippet)
+    def __getattr__( self, name ):
+        return getattr( self.wrapped, name )
+
+    def write( self, text ):
+        if self.enabled:
+            self.write_and_convert( text )
         else:
-            self.wrapped.write(text)
-            self.wrapped.write(Ansi.RESET_ALL)
+            self.wrapped.write( text )
 
-    def __getattr__(self, name):
-        return getattr(self.wrapped, name)
+        if self.autoreset:
+            # but call win32 directly, don't convert this
+            self.write_and_convert( Ansi.RESET_ALL )
 
+    def write_and_convert(self, text):
+        cursor = 0
+        for match in self.ANSI_RE.finditer(text):
+            # write regular text up to next ANSI sequence
+            start, end = match.span()
+            if cursor < start:
+                snippet = text[cursor:start]
+                self.wrapped.write( snippet )
+            cursor = end
 
-def wrap(stream):
-    return ColorStream(stream)
-
-
-ansi_re = re.compile('\033\[(\d+)m')
-
-def ansi_to_win32(text):
-    """
-    yield the snippets of text between ansi codes
-    for each ansi code encountered, make win32 calls to approximate it
-    """
-    start = 0
-    for match in ansi_re.finditer(text):
-        # yield the next snippet of text
-        span = match.span()
-        if span[0] > start:
-            yield text[start:span[0]]
-        start = span[1]
-
-        # convert ANSI codes from match into win32 calls
-        ansi_code = int(match.group(1))
-        if ansi_code in win32_calls:
-            win32_calls[ansi_code]()
-
-    yield text[start:]
+            # convert ANSI sequence to win32 calls
+            ansi_code = int(match.group(1))
+            if ansi_code in win32_calls:
+                win32_calls[ansi_code]()
+        if cursor < len(text) - 1:
+            self.wrapped.write( text[cursor:] )
 
 
-# from winbase.h
-STD_OUTPUT_HANDLE= -11
 
 from ctypes import Structure, c_short, c_ushort, byref, windll
 
@@ -114,8 +108,6 @@ class CONSOLE_SCREEN_BUFFER_INFO(Structure):
     ("dwMaximumWindowSize", COORD)]
 
 
-std_out_handle = windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
-
 
 # from wincon.h
 BLACK     = 0x0000
@@ -127,6 +119,10 @@ MAGENTA   = 0x0005
 YELLOW    = 0x0006
 GREY      = 0x0007
 INTENSE   = 0x0008
+
+# from winbase.h
+STD_OUTPUT_HANDLE= -11
+HANDLE = windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
 
 
 class MsWinTerm(object):
@@ -176,15 +172,16 @@ class MsWinTerm(object):
         self.set_text_attr()
 
 
-    def get_text_attr(self):
+    @property
+    def combined_attrs(self):
         fg = self._fore + self._intense_fore * INTENSE
         bg = self._back + self._intense_back * INTENSE
         return fg + bg * 16
 
 
     def set_text_attr(self):
-        attr = self.get_text_attr()
-        success = windll.kernel32.SetConsoleTextAttribute(std_out_handle, attr)
+        success = windll.kernel32.SetConsoleTextAttribute(
+            HANDLE, self.combined_attrs)
         assert success
 
 
@@ -193,8 +190,7 @@ class MsWinTerm(object):
         Returns the character attributes (colors) of the console screen buffer.
         """
         csbi = CONSOLE_SCREEN_BUFFER_INFO()
-        windll.kernel32.GetConsoleScreenBufferInfo(
-            std_out_handle, byref(csbi))
+        windll.kernel32.GetConsoleScreenBufferInfo( HANDLE, byref(csbi) )
         return csbi.wAttributes
 
 winterm = MsWinTerm()
