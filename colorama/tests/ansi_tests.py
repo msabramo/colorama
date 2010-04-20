@@ -1,6 +1,6 @@
 
 import sys
-from unittest import TestCase, main
+from unittest2 import TestCase, main
 
 from colorama import init, Fore, Back, Style, AnsiToWin32
 

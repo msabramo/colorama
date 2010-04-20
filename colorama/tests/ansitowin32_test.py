@@ -1,7 +1,7 @@
 
 from contextlib import contextmanager
 import sys
-from unittest import TestCase, main
+from unittest2 import TestCase, main
 
 import colorama
 from colorama import AnsiToWin32

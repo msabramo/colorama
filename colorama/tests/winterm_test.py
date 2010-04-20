@@ -17,7 +17,6 @@ class WinTermTest(TestCase):
         self.fail('default fore and back should read from terminal current')
         self.fail('resetall untested')
 
-
     def testCombinedAttrs(self):
         term = WinTerm()
 
@@ -49,7 +48,6 @@ class WinTermTest(TestCase):
         self.assertEquals(term._fore, 5)
         self.assertEquals(term.set_console.called, True)
     
-
     def testBack(self):
         term = WinTerm()
         term.set_console = Mock()
@@ -59,7 +57,6 @@ class WinTermTest(TestCase):
 
         self.assertEquals(term._back, 5)
         self.assertEquals(term.set_console.called, True)
-
         
     def testStyle(self):
         term = WinTerm()
@@ -70,7 +67,6 @@ class WinTermTest(TestCase):
 
         self.assertEquals(term._style, 22)
         self.assertEquals(term.set_console.called, True)
-
 
     @patch('colorama.winterm.windll.kernel32')
     def test_set_console(self, kernel32):
