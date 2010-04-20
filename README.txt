@@ -124,6 +124,8 @@ nose's 'nosetests' to run the tests although they may run without it, using::
 Changes
 =======
 
+0.1.4
+    Implemented RESET_ALL on application exit
 0.1.3
     Implemented init(wrap=False)
 0.1.2
