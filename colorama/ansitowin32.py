@@ -3,13 +3,16 @@ import re
 import sys
 
 from .ansi import AnsiFore, AnsiBack, AnsiStyle
-from .winterm import WinColor, WinStyle, WinTerm
 
+try:
+    from .winterm import WinColor, WinStyle, WinTerm
+    winterm = WinTerm()
+except ImportError:
+    winterm = None
 
-winterm = WinTerm()
 
 win32_calls = {
-    AnsiStyle.RESET_ALL: winterm.reset_all,
+    AnsiStyle.RESET_ALL: lambda: winterm.reset_all(),
     AnsiStyle.BRIGHT: lambda: winterm.style(WinStyle.BRIGHT),
     AnsiStyle.DIM: lambda: winterm.style(WinStyle.DIM),
     AnsiStyle.NORMAL: lambda: winterm.style(WinStyle.NORMAL),

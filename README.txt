@@ -15,7 +15,24 @@ already use ANSI sequences to produce colored output on Linux or Macs (eg.
 using packages like 'termcolor') can now also work on Windows, simply by
 calling ``colorama.init()``.
 
-Status: Feature complete. Alpha release.
+
+Status & Known Problems
+=======================
+
+Just became feature complete. Alpha release.
+
+Only tested on WinXP (CMD, Console2) and Ubuntu (gnome-terminal, xterm). Much
+obliged if anyone can let me know how it fares elsewhere, in particular on
+Macs.
+
+Detailed behaviour, such as background colors when window is scrolling, differs
+between operating systems. Currently looking at if that can & should be fixed
+or compensated for.
+
+Only the colors and dim/bright subset of ANSI 'm' commands are recognised.
+There are many other ANSI sequences (eg. moving cursor position) that could
+also be usefully converted into win32 calls. These are currently silently
+stripped from the output on Windows.
 
 
 Dependencies
@@ -124,6 +141,8 @@ nose's 'nosetests' to run the tests although they may run without it, using::
 Changes
 =======
 
+0.1.5
+    Now works on Ubuntu.
 0.1.4
     Implemented RESET_ALL on application exit
 0.1.3
@@ -133,13 +152,5 @@ Changes
 0.1.1
     Minor tidy
 0.1
-    Works for foreground color, background color, bright or dim
-
-Known Problems
-==============
-
-Only the colors and dim/bright subset of ANSI 'm' commands are recognised.
-There are many other ANSI sequences (eg. moving cursor position) that could
-also be usefully converted into win32 calls. These are currently silently
-stripped from the output on Windows.
+    Works on Windows for foreground color, background color, bright or dim
 
