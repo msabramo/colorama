@@ -13,9 +13,8 @@ class WinTermTest(TestCase):
         self.assertEquals(term._back, WinColor.BLACK) 
         self.assertEquals(term._style, WinStyle.NORMAL) 
 
-    def DONTtestDefaults(self):
+    def testDefaults(self):
         self.fail('default fore and back should read from terminal current')
-        self.fail('resetall untested')
 
     def testCombinedAttrs(self):
         term = WinTerm()
@@ -37,6 +36,20 @@ class WinTermTest(TestCase):
         self.assertEquals(
             term.combined_attrs,
             WinColor.YELLOW + WinColor.MAGENTA * 16 + WinStyle.BRIGHT)
+
+    def testResetAll(self):
+        term = WinTerm()
+        term.set_console = Mock()
+        term._fore = -1
+        term._back = -1
+        term._style = -1
+
+        term.reset_all()
+
+        self.assertEquals(term._fore, WinColor.GREY)
+        self.assertEquals(term._back, WinColor.BLACK)
+        self.assertEquals(term._style, WinStyle.NORMAL)
+        self.assertEquals(term.set_console.called, True)
 
     def testFore(self):
         term = WinTerm()

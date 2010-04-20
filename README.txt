@@ -121,8 +121,8 @@ Windows is overridden to first perform the ANSI to Win32 conversion on text::
 Development
 ===========
 
-Tests require Michael Foord's Mock module. I have been using nosetests to run
-the tests although they may work without it, using::
+Tests require Michael Foord's modules 'unittest2' and 'mock'. I have been using
+nose's 'nosetests' to run the tests although they may run without it, using::
 
     python -m colorama.tests.<module>
 
