@@ -84,5 +84,6 @@ for background in BACKS:
 
     print
 
-print Style.RESET_ALL
+print Fore.YELLOW + Back.BLUE + Style.NORMAL
+print 'Should reset to default colors atexit...'
 

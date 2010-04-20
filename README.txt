@@ -44,9 +44,8 @@ sequences out of any text sent to stdout or stderr, and will replace them with
 equivalent Win32 calls.
 
 Calling ''init()'' has no effect on other platforms (unless you use
-'autoreset', see below) The intention is that all applications should call
-init() unconditionally, then their colored text output simply works on all
-platforms.
+'autoreset', see below) The intention is that applications should call init()
+unconditionally to make subsequent ANSI output just work on all platforms.
 
 Colored Output
 --------------
@@ -129,10 +128,14 @@ nose's 'nosetests' to run the tests although they may run without it, using::
 Changes
 =======
 
-0.1.3 - init(wrap=False) implemented
-0.1.2 - init(autoreset=True) implemented
-0.1.1 - minor tidy
-0.1 - works for foreground color, background color, bright or dim
+0.1.3
+    Implemented init(wrap=False)
+0.1.2
+    Implemented init(autoreset=True)
+0.1.1
+    Minor tidy
+0.1
+    Works for foreground color, background color, bright or dim
 
 Known Problems
 ==============
