@@ -89,8 +89,6 @@ implemented)*.
 Autoreset
 ---------
 
-*Not implemented*
-
 If you find yourself repeatedly sending reset sequences to turn off color
 changes at the end of every print, then init(autoreset=True) will automate
 that::
@@ -130,9 +128,8 @@ the tests although they may work without it, using::
 Known Problems
 ==============
 
-Only recognised ANSI escape sequences ('m' commands, ie. colors, dim/bright)
-are filtered out of the output text. Unrecognised sequences (eg. moving the
-text cursor) appear as gobbledygook in the output on Windows. Ideally, these
-could be implimented using win32 calls too. In the meantime, is it better to
-filter them out of the output? I don't know.
+Only the colors and dim/bright subset of ANSI 'm' commands are recognised.
+There are many other ANSI sequences (eg. moving cursor position) that could
+also be usefully converted into win32 calls. These are currently silently
+stripped from the output on Windows.
 

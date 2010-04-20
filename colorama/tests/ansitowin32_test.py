@@ -4,7 +4,8 @@ import sys
 from unittest import TestCase, main
 
 import colorama
-from colorama import Fore, AnsiToWin32, winterm
+from colorama import AnsiToWin32
+from colorama.ansitowin32 import winterm
 
 from mock import Mock, patch
 
@@ -17,6 +18,9 @@ def platform(name):
 
 
 class AnsiToWin32Test(TestCase):
+
+    def tearDown(self):
+        winterm.reset_all()
 
     def testInit(self):
         mockStdout = object()
@@ -64,27 +68,29 @@ class AnsiToWin32Test(TestCase):
         self.assertFalse(stream.write_and_convert.called)
         self.assertEquals(stream.wrapped.write.call_args, (('abc',), {}))
 
-    def DONTtestWriteAutoresetsIfOn(self):
-        # TODO: this should test for invoke win32_calls[0] directly, instead
+    def testWriteAutoresetsIfOn(self):
         stream = AnsiToWin32(Mock())
+        stream.enabled = True
         stream.write_and_convert = Mock()
         stream.autoreset = True
+        stream.winterm = Mock()
 
         stream.write('abc')
         
         self.assertEqual(
-            stream.write_and_convert.call_args,
-            (('\033[0m',), {}))
+            stream.winterm.method_calls[-1],
+            ('reset_all', (), {}) )
 
-    def DONTtestWriteDoesntAutoresetIfOff(self):
-        # TODO: this should test for invoke win32_calls[0] directly, instead
+    def testWriteDoesntAutoresetIfOff(self):
         stream = AnsiToWin32(Mock())
+        stream.enabled = True
         stream.write_and_convert = Mock()
         stream.autoreset = False
+        stream.winterm = Mock()
 
         stream.write('abc')
         
-        self.assertFalse( stream.write_and_convert.called )
+        self.assertEqual(stream.winterm.method_calls, [])
 
     def testWriteAndConvertWritesPlainText(self):
         stream = AnsiToWin32(Mock())

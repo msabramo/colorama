@@ -1,11 +1,12 @@
 
-from StringIO import StringIO
 import sys
 from unittest import TestCase, main
 
-from .. import init, AnsiToWin32
+from mock import Mock, patch
 
 from .utils import platform
+
+from .. import init, AnsiToWin32
 
 stdout_orig = sys.stdout
 stderr_orig = sys.stderr
@@ -43,12 +44,32 @@ class InitTest(TestCase):
             init()
             self.assertNotWrapped()
 
+    def testInitDoesWrapOnNonWindowsIfAutoresetOn(self):
+        with platform('darwin'):
+            init(autoreset=True)
+            self.assertWrapped()
+
     def testInitOnlyWrapsOnce(self):
         with platform('windows'):
             init()
             init()
-            self.assertNotEqual(type(sys.stdout.wrapped), AnsiToWin32)
-            self.assertNotEqual(type(sys.stderr.wrapped), AnsiToWin32)
+            self.assertWrapped()
+
+    def testAutoResetPassedOn(self):
+        init(autoreset=True)
+        self.assertTrue( sys.stdout.autoreset )
+        self.assertTrue( sys.stderr.autoreset )
+
+    def testAutoResetChangeable(self):
+        init()
+        init(autoreset=True)
+        self.assertWrapped()
+        self.assertTrue( sys.stdout.autoreset )
+        self.assertTrue( sys.stderr.autoreset )
+        init()
+        self.assertWrapped()
+        self.assertFalse( sys.stdout.autoreset )
+        self.assertFalse( sys.stderr.autoreset )
 
 
 if __name__ == '__main__':

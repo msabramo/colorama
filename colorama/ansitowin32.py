@@ -42,6 +42,7 @@ class AnsiToWin32(object):
         self.wrapped = wrapped
         self.autoreset = autoreset
         self.enabled = sys.platform.startswith('win')
+        self.winterm = winterm
 
 
     def __getattr__(self, name):
@@ -51,9 +52,10 @@ class AnsiToWin32(object):
     def write(self, text):
         if self.enabled:
             self.write_and_convert(text)
+            if self.autoreset:
+                self.winterm.reset_all()
         else:
             self.wrapped.write(text)
-
 
     def write_and_convert(self, text):
         cursor = 0
