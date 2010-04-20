@@ -95,9 +95,8 @@ Available formatting constants are::
     Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, DEFAULT.
     Style: DIM, NORMAL, BRIGHT, RESET_ALL
 
-Style.RESET_ALL resets foreground, background and brightness.
-Colorama will perform this reset automatically on program exit *(Not
-implemented)*.
+Style.RESET_ALL resets foreground, background and brightness. Colorama will
+perform this reset automatically on program exit.
 
 Autoreset
 ---------
