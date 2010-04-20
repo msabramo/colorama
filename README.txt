@@ -19,8 +19,7 @@ importing and initialising Colorama.
 Status
 ======
 
-In development. Features described in this documentation might not be
-implemented yet.
+In development. Some features, as noted below, are not implemented yet.
 
 
 Dependencies
@@ -77,17 +76,20 @@ such as Termcolor (http://pypi.python.org/pypi/termcolor)::
     from termcolor import colored
     print colored('Hello, World!', 'green', 'on_red')
 
-Available formatting constants are:
+Available formatting constants are::
 
-    Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, ALL, DEFAULT.
-    Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, ALL, DEFAULT.
-    Style: DIM, DEFAULT, BRIGHT, ALL, RESET_ALL
+    Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, DEFAULT.
+    Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, DEFAULT.
+    Style: DIM, NORMAL, BRIGHT, RESET_ALL
 
-Style.RESET_ALL resets all attributes: foreground, background and brightness.
-Colorama will perform this reset automatically on program exit.
+Style.RESET_ALL resets foreground, background and brightness.
+Colorama will perform this reset automatically on program exit *(Not
+implemented)*.
 
 Autoreset
 ---------
+
+*Not implemented*
 
 If you find yourself repeatedly sending reset sequences to turn off color
 changes at the end of every print, then init(autoreset=True) will automate
@@ -106,10 +108,10 @@ write() to do their work. Using init(autoreset=True) will do this wrapping
 on all platforms, not just Windows.
 
 If these proxy objects wrapping stdout and stderr cause you problems, then this
-can be disabled using init(wrap=False), and you can instead access Colorama's
-AnsiToWin32 proxy directly. Any attribute access on this object will be
-forwarded to the stream it wraps, apart from .write(), which on Windows is
-overridden to first perform the ANSI to Win32 conversion on text::
+can be disabled using init(wrap=False) (*Not implemented*), and you can instead
+access Colorama's AnsiToWin32 proxy directly. Any attribute access on this
+object will be forwarded to the stream it wraps, apart from .write(), which on
+Windows is overridden to first perform the ANSI to Win32 conversion on text::
 
     from colorama import init, AnsiToWin32
     init(wrap=False)
@@ -120,17 +122,17 @@ overridden to first perform the ANSI to Win32 conversion on text::
 Development
 ===========
 
-Tests require Michael Foord's Mock module. I have been using nose to run the
-tests although they may work without it.
+Tests require Michael Foord's Mock module. I have been using nosetests to run
+the tests although they may work without it, using::
+
+    python -m colorama.tests.<module>
 
 Known Problems
 ==============
 
-Only stdout is currently implimented: stderr is not affected.
-
-Only recognised ANSI escape sequences (ie colors, dim/bright) are filtered out
-of the output text. Unrecognised sequences (eg. moving the text cursor) appear
-as gobbledygook in the output on Windows. Ideally, these could be implimented
-using win32 calls too. In the meantime, is it better to filter them out of the
-output?
+Only recognised ANSI escape sequences ('m' commands, ie. colors, dim/bright)
+are filtered out of the output text. Unrecognised sequences (eg. moving the
+text cursor) appear as gobbledygook in the output on Windows. Ideally, these
+could be implimented using win32 calls too. In the meantime, is it better to
+filter them out of the output? I don't know.
 
