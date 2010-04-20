@@ -41,19 +41,48 @@ STYLES = [
     Style.BRIGHT,
 ]
 
+NAMES = {
+    Fore.BLACK: 'black',
+    Fore.RED: 'red',
+    Fore.GREEN: 'green',
+    Fore.YELLOW: 'yellow',
+    Fore.BLUE: 'blue',
+    Fore.MAGENTA: 'magenta',
+    Fore.CYAN: 'cyan',
+    Fore.WHITE: 'white',
+    Fore.RESET: 'reset',
+    Back.BLACK: 'black',
+    Back.RED: 'red',
+    Back.GREEN: 'green',
+    Back.YELLOW: 'yellow',
+    Back.BLUE: 'blue',
+    Back.MAGENTA: 'magenta',
+    Back.CYAN: 'cyan',
+    Back.WHITE: 'white',
+    Back.RESET: 'reset',
+}
+
 # use stdout.write to write chars with no newline nor spaces between them
+sys.stdout.write('        ')
+for foreground in FORES:
+    sys.stdout.write('%s%-7s' % (foreground, NAMES[foreground]))
+print
+
 for background in BACKS:
-    sys.stdout.write(background)
+    sys.stdout.write('%s%-7s%s %s' %
+       (background, NAMES[background], Back.RESET, background))
 
-    for inten in STYLES:
-        sys.stdout.write(inten)
+    for foreground in FORES:
+        sys.stdout.write(foreground)
 
-        for foreground in FORES:
-            sys.stdout.write(foreground)
+        for brightness in STYLES:
+            sys.stdout.write(brightness)
 
-            sys.stdout.write('XX')
+            sys.stdout.write('X ')
 
-        sys.stdout.write(' ')
+        sys.stdout.write(Style.RESET_ALL + ' ' + background)
 
-    print Style.RESET_ALL
+    print
+
+print Style.RESET_ALL
 

@@ -13,7 +13,7 @@ sequences, and makes them work on Windows too.
 This has the happy side-effect that existing applications or libraries which
 already use ANSI sequences to produce colored output on Linux or Macs (eg.
 using packages like 'termcolor') can now also work on Windows, simply by
-importing and initialising Colorama.
+calling ``colorama.init()``.
 
 
 Status
@@ -51,7 +51,8 @@ platforms.
 Colored Output
 --------------
 
-Cross-platform printing of colored text can then be done::
+Cross-platform printing of colored text can then be done using Colorama's
+constant shorthand for ANSI escape sequences::
 
     from colorama import Fore, Back, Style
     print Fore.RED + 'some red text'
@@ -102,11 +103,11 @@ Without wrapping stdout
 -----------------------
 
 Colorama works by wrapping stdout and stderr with proxy objects, that override
-write() to do their work. Using init(autoreset=True) will do this wrapping
-on all platforms, not just Windows.
+write() to do their work. Using autoreset (above) will do this wrapping on all
+platforms, not just Windows.
 
 If these proxy objects wrapping stdout and stderr cause you problems, then this
-can be disabled using init(wrap=False) (*Not implemented*), and you can instead
+can be disabled using init(wrap=False) (*Not implemented*). You can then 
 access Colorama's AnsiToWin32 proxy directly. Any attribute access on this
 object will be forwarded to the stream it wraps, apart from .write(), which on
 Windows is overridden to first perform the ANSI to Win32 conversion on text::
