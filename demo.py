@@ -82,8 +82,11 @@ for background in BACKS:
 
         sys.stdout.write(Style.RESET_ALL + ' ' + background)
 
-    print
+    print Style.RESET_ALL
 
-print Fore.YELLOW + Back.BLUE + Style.NORMAL
-print 'Should reset to default colors atexit...'
+print
+print Fore.YELLOW + Back.BLUE + Style.NORMAL + \
+    'Should reset to default colors atexit...'
+print
+
 
