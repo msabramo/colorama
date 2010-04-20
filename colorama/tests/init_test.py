@@ -44,10 +44,18 @@ class InitTest(TestCase):
             init()
             self.assertNotWrapped()
 
-    def testInitDoesWrapOnNonWindowsIfAutoresetOn(self):
+    def testInitAutoresetOnWrapsOnAllPlatforms(self):
         with platform('darwin'):
             init(autoreset=True)
             self.assertWrapped()
+
+    def testInitWrapOffDoesntWrapOnWindows(self):
+        with platform('windows'):
+            init(wrap=False)
+            self.assertNotWrapped()
+
+    def testInitWrapOffIncompatibleWithAutoresetOn(self):
+        self.assertRaises( ValueError, lambda: init(autoreset=True, wrap=False) )
 
     def testInitOnlyWrapsOnce(self):
         with platform('windows'):

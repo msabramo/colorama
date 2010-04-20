@@ -2,7 +2,7 @@ from os.path import dirname, join
 from setuptools import setup, find_packages
 
 name = 'colorama'
-version = '0.1.2'
+version = '0.1.3'
 
 def get_long_description(filename):
     readme = join(dirname(__file__), filename)

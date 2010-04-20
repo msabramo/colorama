@@ -2,12 +2,16 @@ import sys
 
 from .ansitowin32 import AnsiToWin32
 
-def init(autoreset=False):
-    if sys.platform.startswith('win') or autoreset:
-        sys.stdout = wrap(sys.stdout, autoreset)
-        sys.stderr = wrap(sys.stderr, autoreset)
+def init(autoreset=False, wrap=True):
 
-def wrap(stream, autoreset):
+    if autoreset==True and wrap==False:
+        raise ValueError('autoreset=True conflicts with wrap=False')
+
+    if (sys.platform.startswith('win') and wrap) or autoreset:
+        sys.stdout = wrap_stream(sys.stdout, autoreset)
+        sys.stderr = wrap_stream(sys.stderr, autoreset)
+
+def wrap_stream(stream, autoreset):
     real_stream = stream
     if isinstance(stream, AnsiToWin32):
         real_stream = stream.wrapped

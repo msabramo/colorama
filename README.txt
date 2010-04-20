@@ -107,10 +107,10 @@ write() to do their work. Using autoreset (above) will do this wrapping on all
 platforms, not just Windows.
 
 If these proxy objects wrapping stdout and stderr cause you problems, then this
-can be disabled using init(wrap=False) (*Not implemented*). You can then 
-access Colorama's AnsiToWin32 proxy directly. Any attribute access on this
-object will be forwarded to the stream it wraps, apart from .write(), which on
-Windows is overridden to first perform the ANSI to Win32 conversion on text::
+can be disabled using init(wrap=False). You can then access Colorama's
+AnsiToWin32 proxy directly. Any attribute access on this object will be
+forwarded to the stream it wraps, apart from .write(), which on Windows is
+overridden to first perform the ANSI to Win32 conversion on text::
 
     from colorama import init, AnsiToWin32
     init(wrap=False)
@@ -125,6 +125,14 @@ Tests require Michael Foord's modules 'unittest2' and 'mock'. I have been using
 nose's 'nosetests' to run the tests although they may run without it, using::
 
     python -m colorama.tests.<module>
+
+Changes
+=======
+
+0.1.3 - init(wrap=False) implemented
+0.1.2 - init(autoreset=True) implemented
+0.1.1 - minor tidy
+0.1 - works for foreground color, background color, bright or dim
 
 Known Problems
 ==============
