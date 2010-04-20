@@ -1,6 +1,7 @@
 import sys
 import atexit
 
+from .ansi import Style
 from .ansitowin32 import AnsiToWin32
 
 orig_stdout = sys.stdout
@@ -29,5 +30,5 @@ def wrap_stream(stream, autoreset):
 
 
 def reset_all():
-    raise NotImplemented
+    AnsiToWin32(orig_stdout).write(Style.RESET_ALL)
 

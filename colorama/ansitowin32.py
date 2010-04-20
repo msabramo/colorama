@@ -57,6 +57,7 @@ class AnsiToWin32(object):
         else:
             self.wrapped.write(text)
 
+
     def write_and_convert(self, text):
         cursor = 0
         for match in self.ANSI_RE.finditer(text):

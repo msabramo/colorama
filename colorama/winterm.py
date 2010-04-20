@@ -1,5 +1,5 @@
 
-from ctypes import Structure, c_short, c_ushort, byref, windll
+from ctypes import windll
 
 
 # from wincon.h

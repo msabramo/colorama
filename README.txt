@@ -15,11 +15,7 @@ already use ANSI sequences to produce colored output on Linux or Macs (eg.
 using packages like 'termcolor') can now also work on Windows, simply by
 calling ``colorama.init()``.
 
-
-Status
-======
-
-In development. Some features, as noted below, are not implemented yet.
+Status: Feature complete. Alpha release.
 
 
 Dependencies
