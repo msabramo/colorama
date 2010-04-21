@@ -3,36 +3,20 @@ http://code.google.com/p/colorama/
 Description
 ===========
 
-Provides a simple cross-platform API to print colored terminal text from Python
-applications.
+Makes ANSI escape character sequences for producing colored terminal text work
+under MS Windows.
 
-ANSI escape character sequences are commonly used to produce colored terminal
-text on Macs and Unix. Colorama provides some shortcuts to generate these
-sequences, and makes them work on Windows too.
+ANSI escape character sequences have long been used to produce colored terminal
+text on Unix and Macs. Colorama makes this work on Windows, too. It also
+provides some shortcuts to help generate ANSI sequences, and works fine in
+conjunction with any other ANSI sequence generation library, such as Termcolor
+(http://pypi.python.org/pypi/termcolor.)
 
-This has the happy side-effect that existing applications or libraries which
-already use ANSI sequences to produce colored output on Linux or Macs (eg.
-using packages like 'termcolor') can now also work on Windows, simply by
-calling ``colorama.init()``.
-
-
-Status & Known Problems
-=======================
-
-Just became feature complete. Alpha release.
-
-Only tested on WinXP (CMD, Console2) and Ubuntu (gnome-terminal, xterm). Much
-obliged if anyone can let me know how it fares elsewhere, in particular on
-Macs.
-
-Detailed behaviour, such as background colors when window is scrolling, differs
-between operating systems. Currently looking at if that can & should be fixed
-or compensated for.
-
-Only the colors and dim/bright subset of ANSI 'm' commands are recognised.
-There are many other ANSI sequences (eg. moving cursor position) that could
-also be usefully converted into win32 calls. These are currently silently
-stripped from the output on Windows.
+This has the upshot of providing a simple cross-platform API for printing
+colored terminal text from Python, and has the happy side-effect that existing
+applications or libraries which use ANSI sequences to produce colored output on
+Linux or Macs can now also work on Windows, simply by calling
+``colorama.init()``.
 
 
 Dependencies
@@ -79,14 +63,15 @@ or simply by manually printing ANSI sequences from your own code::
     print '/033[30m' # and reset to default color
 
 or Colorama can be used happily in conjunction with existing ANSI libraries
-such as Termcolor (http://pypi.python.org/pypi/termcolor)::
+such as Termcolor::
+
+    from colorama import init
+    from termcolor import colored
 
     # use Colorama to make Termcolor work on Windows too
-    from colorama import init
     init()
 
     # then use Termcolor for all colored text output
-    from termcolor import colored
     print colored('Hello, World!', 'green', 'on_red')
 
 Available formatting constants are::
@@ -129,13 +114,44 @@ overridden to first perform the ANSI to Win32 conversion on text::
     stream = AnsiToWin32(sys.stderr)
     print >>stream, Fore.BLUE + 'blue text on stderr'    
 
+
+Status & Known Problems
+=======================
+
+Just became feature complete. Consider it alpha.
+
+Only tested on WinXP (CMD, Console2) and Ubuntu (gnome-terminal, xterm). Much
+obliged if anyone can let me know how it fares elsewhere, in particular on
+Macs.
+
+    On Linux terminals, scrolling fills the whole new line with the current
+    background color. On Windows, the new line is filled with the default
+    background color.
+
+    On Linux, the foreground color has dim / normal / bright settings, but
+    the background is unaffected. On Windows, both foreground and background
+    have independent normal / bright settings. Mapping between these two is
+    wrinkly. See screenshots at http://tartley.com/?p=1062.
+
+    On Linux terminals, the 'RESET' background and foreground colors are
+    potentially distinct from all other colors. On Windows, Back.RESET
+    and Fore.RESET produce an RGB which is indistinguishable from one of
+    the other color entries.
+
+Only the colors and dim/bright subset of ANSI 'm' commands are recognised.
+There are many other ANSI sequences (eg. moving cursor position) that could
+also be usefully converted into win32 calls. These are currently silently
+stripped from the output on Windows.
+
+
 Development
 ===========
 
-Tests require Michael Foord's modules 'unittest2' and 'mock'. I have been using
-nose's 'nosetests' to run the tests although they may run without it, using::
+Tests require Michael Foord's modules 'unittest2' and 'mock', running tests
+using::
 
-    python -m colorama.tests.<module>
+    unit2 discover -p '*_test.py'
+
 
 Changes
 =======
