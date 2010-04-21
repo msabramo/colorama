@@ -3,7 +3,7 @@ from unittest2 import TestCase, main
 
 from mock import patch, Mock
 
-from ..winterm import WinColor, HANDLE, WinStyle, WinTerm
+from ..winterm import WinColor, WinStyle, WinTerm
 
 class WinTermTest(TestCase):
 
@@ -14,7 +14,7 @@ class WinTermTest(TestCase):
         self.assertEquals(term._style, WinStyle.NORMAL) 
 
     def testDefaults(self):
-        self.fail('default fore and back should read from terminal current')
+        self.fail('default fore, back & style should use terminal current')
 
     def testCombinedAttrs(self):
         term = WinTerm()
@@ -81,13 +81,14 @@ class WinTermTest(TestCase):
         self.assertEquals(term._style, 22)
         self.assertEquals(term.set_console.called, True)
 
-    @patch('colorama.winterm.windll.kernel32')
-    def test_set_console(self, kernel32):
+    def testSetConsole(self):
         term = WinTerm()
+        term.windll = Mock()
+        term.handle = Mock()
         term.set_console()
         self.assertEquals(
-            kernel32.SetConsoleTextAttribute.call_args,
-            ((HANDLE, term.combined_attrs), {})
+            term.windll.kernel32.SetConsoleTextAttribute.call_args,
+            ((term.handle, term.combined_attrs), {})
         )
 
 

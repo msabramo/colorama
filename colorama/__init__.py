@@ -1,4 +1,4 @@
-from .initialise import init
-from .ansi import Fore, Back, Style
-from .ansitowin32 import AnsiToWin32
+from colorama.initialise import init
+from colorama.ansi import Fore, Back, Style
+from colorama.ansitowin32 import AnsiToWin32
 

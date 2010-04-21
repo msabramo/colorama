@@ -2,7 +2,7 @@
 import sys
 from unittest2 import TestCase, main
 
-from colorama import init, Fore, Back, Style, AnsiToWin32
+from colorama import Fore, Back, Style, AnsiToWin32
 
 
 stdout_orig = sys.stdout

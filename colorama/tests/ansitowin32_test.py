@@ -5,7 +5,6 @@ from unittest2 import TestCase, main
 
 import colorama
 from colorama import AnsiToWin32
-from colorama.ansitowin32 import winterm
 
 from mock import Mock, patch
 
@@ -20,7 +19,7 @@ def platform(name):
 class AnsiToWin32Test(TestCase):
 
     def tearDown(self):
-        winterm.reset_all()
+        pass # TODO winterm.reset_all()
 
     def testInit(self):
         mockStdout = object()
@@ -29,7 +28,8 @@ class AnsiToWin32Test(TestCase):
         self.assertEquals(stream.wrapped, mockStdout)
         self.assertEquals(stream.autoreset, auto)
 
-    def testEnabledOnWindows(self):
+    @patch('colorama.ansitowin32.WinTerm')
+    def testEnabledOnWindows(self, _):
         with platform('windows'):
             stream = AnsiToWin32(None)
             self.assertTrue(stream.enabled)
@@ -99,6 +99,7 @@ class AnsiToWin32Test(TestCase):
 
     def testWriteAndConvertStripsAllValidAnsi(self):
         stream = AnsiToWin32(Mock())
+        stream.call_win32 = Mock()
         data = [
             'abc\033[mdef',
             'abc\033[0mdef',
@@ -124,6 +125,7 @@ class AnsiToWin32Test(TestCase):
 
     def testWriteAndConvertSkipsEmptySnippets(self):
         stream = AnsiToWin32(Mock())
+        stream.call_win32 = Mock()
         stream.write_and_convert( '\033[40m\033[41m' )
         self.assertFalse( stream.wrapped.write.called )
 
@@ -157,16 +159,14 @@ class AnsiToWin32Test(TestCase):
         for datum, expected in data.iteritems():
             self.assertEquals(stream.extract_params(datum), expected)
 
-    @patch('colorama.ansitowin32.win32_calls', {})
     def testCallWin32UsesLookup(self):
         listener = Mock()
-        colorama.ansitowin32.win32_calls.clear()
-        colorama.ansitowin32.win32_calls.update( {
+        stream = AnsiToWin32(Mock())
+        stream.win32_calls = {
             1: lambda: listener(11),
             2: lambda: listener(22),
             3: lambda: listener(33),
-        } )
-        stream = AnsiToWin32(Mock())
+        }
         stream.call_win32('m', (3, 1, 99, 2))
         self.assertEquals(
             [a[0][0] for a in listener.call_args_list],

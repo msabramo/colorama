@@ -4,37 +4,7 @@ import sys
 
 from .ansi import AnsiFore, AnsiBack, AnsiStyle
 
-try:
-    from .winterm import WinColor, WinStyle, WinTerm
-    winterm = WinTerm()
-except ImportError:
-    winterm = None
-
-
-win32_calls = {
-    AnsiStyle.RESET_ALL: lambda: winterm.reset_all(),
-    AnsiStyle.BRIGHT: lambda: winterm.style(WinStyle.BRIGHT),
-    AnsiStyle.DIM: lambda: winterm.style(WinStyle.DIM),
-    AnsiStyle.NORMAL: lambda: winterm.style(WinStyle.NORMAL),
-    AnsiFore.BLACK: lambda: winterm.fore(WinColor.BLACK),
-    AnsiFore.RED: lambda: winterm.fore(WinColor.RED),
-    AnsiFore.GREEN: lambda: winterm.fore(WinColor.GREEN),
-    AnsiFore.YELLOW: lambda: winterm.fore(WinColor.YELLOW),
-    AnsiFore.BLUE: lambda: winterm.fore(WinColor.BLUE),
-    AnsiFore.MAGENTA: lambda: winterm.fore(WinColor.MAGENTA),
-    AnsiFore.CYAN: lambda: winterm.fore(WinColor.CYAN),
-    AnsiFore.WHITE: lambda: winterm.fore(WinColor.GREY),
-    AnsiFore.RESET: lambda: winterm.fore(),
-    AnsiBack.BLACK: lambda: winterm.back(WinColor.BLACK),
-    AnsiBack.RED: lambda: winterm.back(WinColor.RED),
-    AnsiBack.GREEN: lambda: winterm.back(WinColor.GREEN),
-    AnsiBack.YELLOW: lambda: winterm.back(WinColor.YELLOW),
-    AnsiBack.BLUE: lambda: winterm.back(WinColor.BLUE),
-    AnsiBack.MAGENTA: lambda: winterm.back(WinColor.MAGENTA),
-    AnsiBack.CYAN: lambda: winterm.back(WinColor.CYAN),
-    AnsiBack.WHITE: lambda: winterm.back(WinColor.GREY),
-    AnsiBack.RESET: lambda: winterm.back(),
-}
+from .winterm import WinColor, WinStyle, WinTerm
 
 
 class AnsiToWin32(object):
@@ -45,7 +15,36 @@ class AnsiToWin32(object):
         self.wrapped = wrapped
         self.autoreset = autoreset
         self.enabled = sys.platform.startswith('win')
-        self.winterm = winterm
+        if self.enabled:
+            self.winterm = WinTerm()
+            self.win32_calls = self.get_win32_calls(self.winterm)
+
+
+    def get_win32_calls(self, winterm):
+        return {
+            AnsiStyle.RESET_ALL: lambda: winterm.reset_all(),
+            AnsiStyle.BRIGHT: lambda: winterm.style(WinStyle.BRIGHT),
+            AnsiStyle.DIM: lambda: winterm.style(WinStyle.DIM),
+            AnsiStyle.NORMAL: lambda: winterm.style(WinStyle.NORMAL),
+            AnsiFore.BLACK: lambda: winterm.fore(WinColor.BLACK),
+            AnsiFore.RED: lambda: winterm.fore(WinColor.RED),
+            AnsiFore.GREEN: lambda: winterm.fore(WinColor.GREEN),
+            AnsiFore.YELLOW: lambda: winterm.fore(WinColor.YELLOW),
+            AnsiFore.BLUE: lambda: winterm.fore(WinColor.BLUE),
+            AnsiFore.MAGENTA: lambda: winterm.fore(WinColor.MAGENTA),
+            AnsiFore.CYAN: lambda: winterm.fore(WinColor.CYAN),
+            AnsiFore.WHITE: lambda: winterm.fore(WinColor.GREY),
+            AnsiFore.RESET: lambda: winterm.fore(),
+            AnsiBack.BLACK: lambda: winterm.back(WinColor.BLACK),
+            AnsiBack.RED: lambda: winterm.back(WinColor.RED),
+            AnsiBack.GREEN: lambda: winterm.back(WinColor.GREEN),
+            AnsiBack.YELLOW: lambda: winterm.back(WinColor.YELLOW),
+            AnsiBack.BLUE: lambda: winterm.back(WinColor.BLUE),
+            AnsiBack.MAGENTA: lambda: winterm.back(WinColor.MAGENTA),
+            AnsiBack.CYAN: lambda: winterm.back(WinColor.CYAN),
+            AnsiBack.WHITE: lambda: winterm.back(WinColor.GREY),
+            AnsiBack.RESET: lambda: winterm.back(),
+        }
 
 
     def __getattr__(self, name):
@@ -92,6 +91,6 @@ class AnsiToWin32(object):
     def call_win32(self, command, params):
         if command == 'm':
             for param in params:
-                if param in win32_calls:
-                    win32_calls[param]()
+                if param in self.win32_calls:
+                    self.win32_calls[param]()
 
