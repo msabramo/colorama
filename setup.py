@@ -1,8 +1,8 @@
 from os.path import dirname, join
 from setuptools import setup, find_packages
+from colorama import __version__
 
 name = 'colorama'
-version = '0.1.5'
 
 def get_long_description(filename):
     readme = join(dirname(__file__), filename)
@@ -11,7 +11,7 @@ def get_long_description(filename):
 
 setup(
     name=name,
-    version=version,
+    version=__version__,
     description="Cross-platform colored terminal text.",
     long_description=get_long_description('README.txt'),
     keywords='color colour terminal text ansi windows crossplatform xplatform',
