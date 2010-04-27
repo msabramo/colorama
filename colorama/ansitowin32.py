@@ -11,15 +11,27 @@ class AnsiToWin32(object):
     ANSI_RE = re.compile('\033\[((?:\d|;)*)([a-zA-Z])')
 
     def __init__(self, wrapped, autoreset=False):
+        # The stream we are wrapping (normally sys.stdout or sys.stderr)
         self.wrapped = wrapped
+
+        # True if we reset colors to defaults after every .write()
         self.autoreset = autoreset
+
+        # True if we strip ANSI sequences from our output
         self.strip = sys.platform.startswith('win')
+
+        # True if we convert stripped ANSI into win32 calls
         self.convert = (
             self.strip and
             hasattr(self.wrapped, 'isatty') and
             self.wrapped.isatty())
+
+        # map ansi codes to win32 functions and parameters
         self.win32_calls = self.get_win32_calls()
+
+        # true if we are wrapping stderr
         self.on_stderr = self.wrapped is sys.stderr
+
 
     def get_win32_calls(self):
         if self.convert and winterm:
@@ -70,24 +82,29 @@ class AnsiToWin32(object):
 
 
     def write_and_convert(self, text):
+        '''
+        Write the given text to our wrapped stream, stripping any ANSI
+        sequences from the text, and optionally converting them into win32
+        calls.
+        '''
         cursor = 0
         for match in self.ANSI_RE.finditer(text):
             start, end = match.span()
-            self.write_snippet(text, cursor, start)
-
-            if self.convert:
-                paramstring, command = match.groups()
-                params = self.extract_params(paramstring)
-                self.call_win32(command, params)
-
+            self.write_plain_text(text, cursor, start)
+            self.convert_ansi(*match.groups())
             cursor = end
+        self.write_plain_text(text, cursor, len(text))
 
-        self.write_snippet(text, cursor, len(text))
 
-
-    def write_snippet(self, text, start, end):
+    def write_plain_text(self, text, start, end):
         if start < end:
             self.wrapped.write(text[start:end])
+
+
+    def convert_ansi(self, paramstring, command):
+        if self.convert:
+            params = self.extract_params(paramstring)
+            self.call_win32(command, params)
 
 
     def extract_params(self, paramstring):
