@@ -1,11 +1,21 @@
-#! /usr/bin/env python
+#!/usr/bin/env bash
 
+# Script to demonstrate features of colorama
+
+# This demo, which can manually be visually verified, exists because we don't
+# have an automated system test.
+
+# Implemented as a bash script which invokes python so that we can test the
+# behaviour on exit, which resets default colors again.
+
+python 2>err <<EOF
 import sys
 
 from colorama import init, Fore, Back, Style
 
 init()
 
+# example of common usage
 print Fore.GREEN + 'green' + Fore.RED + 'red' + Fore.RESET + 'normal',
 print Back.GREEN + 'green' + Back.RED + 'red' + Back.RESET + 'normal',
 print Style.DIM + 'dim' + \
@@ -60,6 +70,7 @@ NAMES = {
     Back.RESET: 'reset',
 }
 
+# print grid of all colors and brightnesses
 # use stdout.write to write chars with no newline nor spaces between them
 sys.stdout.write('        ')
 for foreground in FORES:
@@ -82,13 +93,35 @@ for background in BACKS:
 
     print Style.RESET_ALL
 
+# check autoreset works
 init(autoreset=True)
-
 print
 print Fore.CYAN + Back.MAGENTA + Style.BRIGHT + 'colored', 'autoreset'
 
+# check reset_all is called at exit
 init(autoreset=False)
-print Fore.YELLOW + Back.BLUE + Style.BRIGHT + \
-    'Should reset to default colors atexit...'
-print
+print Fore.YELLOW + Back.BLUE + Style.BRIGHT + 'colored',
+
+EOF
+
+echo 'reset at exit'
+
+python 2>err <<EOF2
+import sys
+from colorama import init, Fore
+
+init()
+
+# check that ANSI in redirected stderr is stripped
+print Fore.RED + 'Red stdout.',
+print >>sys.stderr, Fore.BLUE + 'ANSI stripped from blue redirected stderr.'
+
+# check that stripped ANSI in redirected stderr did not affect stdout
+print 'Further stdout should be red'
+EOF2
+
+cat err
+
+rm -rf err out
+
 
