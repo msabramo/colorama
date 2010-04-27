@@ -146,9 +146,8 @@ Fore.RESET produce an RGB which is indistinguishable from one of the other
 color entries.
 
 Only the colors and dim/bright subset of ANSI 'm' commands are recognised.
-There are many other ANSI sequences (eg. moving cursor position) that could
-also be usefully converted into win32 calls. These are currently silently
-stripped from the output on Windows.
+There are many other ANSI sequences (eg. moving cursor position.) These are
+currently silently stripped from the output on Windows.
 
 
 Development
@@ -164,7 +163,13 @@ Changes
 =======
 
 0.1.6
-    
+    Fix ansi sequences with no params now default to parmlist of [0]
+    Fix flaky behaviour of autoreset and reset_all atexit.
+    Fix stacking of repeated atexit calls - now just called once.
+    Fix ghastly import problems while running tests.
+    demo.py (hg checkout only) now demonstrates autoreset and reset atexit.
+    provide colorama.__version__, used by setup.py
+    Tests defanged so they no longer actually change terminal color when run.
 0.1.5
     Now works on Ubuntu.
 0.1.4
