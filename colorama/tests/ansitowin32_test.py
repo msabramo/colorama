@@ -17,28 +17,28 @@ class AnsiToWin32Test(TestCase):
         self.assertEquals(stream.wrapped, mockStdout)
         self.assertEquals(stream.autoreset, auto)
 
-    @patch('colorama.ansitowin32.WinTerm')
-    def testEnabledOnWindows(self, _):
+    @patch('colorama.ansitowin32.winterm', None)
+    def testConvertTrueOnWindows(self):
         with platform('windows'):
             stream = AnsiToWin32(None)
-            self.assertTrue(stream.enabled)
+            self.assertTrue(stream.convert)
 
-    def testDisabledOffWindows(self):
+    def testConvertFalseOffWindows(self):
         with platform('darwin'):
             stream = AnsiToWin32(None)
-            self.assertFalse(stream.enabled)
+            self.assertFalse(stream.convert)
 
     def testIsAProxy(self):
         mock = Mock()
         atw32 = AnsiToWin32( mock )
         self.assertTrue( atw32.random_attr is mock.random_attr )
 
-    def testWriteConvertsIfEnabled(self):
+    def testWriteConvertsIfConverting(self):
         mockStdout = Mock()
         stream = AnsiToWin32(mockStdout)
         stream.wrapped = Mock()
         stream.write_and_convert = Mock()
-        stream.enabled = True
+        stream.convert = True
 
         stream.write('abc')
 
@@ -50,16 +50,16 @@ class AnsiToWin32Test(TestCase):
         stream = AnsiToWin32(mockStdout)
         stream.wrapped = Mock()
         stream.write_and_convert = Mock()
-        stream.enabled = False
+        stream.convert = False
 
         stream.write('abc')
         
         self.assertFalse(stream.write_and_convert.called)
         self.assertEquals(stream.wrapped.write.call_args, (('abc',), {}))
 
-    def assert_autoresets(self, enabled):
+    def assert_autoresets(self, convert):
         stream = AnsiToWin32(Mock())
-        stream.enabled = enabled
+        stream.convert = convert
         stream.reset_all = Mock()
         stream.write_and_convert = Mock()
         stream.autoreset = True
@@ -69,7 +69,7 @@ class AnsiToWin32Test(TestCase):
         
         self.assertTrue( stream.reset_all.called )
 
-    def testWriteAutoresetsIfEnabled(self):
+    def testWriteAutoresetsIfConvertTrue(self):
         self.assert_autoresets(True)
 
     def testWriteAutoresetsIfDisabled(self):
@@ -77,7 +77,7 @@ class AnsiToWin32Test(TestCase):
 
     def testWriteDoesntAutoresetIfOff(self):
         stream = AnsiToWin32(Mock())
-        stream.enabled = True
+        stream.convert = True
         stream.write_and_convert = Mock()
         stream.autoreset = False
         stream.winterm = Mock()
@@ -157,9 +157,9 @@ class AnsiToWin32Test(TestCase):
         listener = Mock()
         stream = AnsiToWin32(listener)
         stream.win32_calls = {
-            1: lambda: listener(11),
-            2: lambda: listener(22),
-            3: lambda: listener(33),
+            1: (lambda *_, **__: listener(11),),
+            2: (lambda *_, **__: listener(22),),
+            3: (lambda *_, **__: listener(33),),
         }
         stream.call_win32('m', (3, 1, 99, 2))
         self.assertEquals(
@@ -169,7 +169,7 @@ class AnsiToWin32Test(TestCase):
     def testCallWin32DefaultsToParams0(self):
         mockStdout = Mock()
         stream = AnsiToWin32(mockStdout)
-        stream.win32_calls = {0: mockStdout.reset}
+        stream.win32_calls = {0: (mockStdout.reset,)}
         
         stream.call_win32('m', [])
 

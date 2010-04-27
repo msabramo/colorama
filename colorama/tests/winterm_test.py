@@ -83,13 +83,28 @@ class WinTermTest(TestCase):
     def testSetConsole(self, mockWindll):
         term = WinTerm()
         term.windll = Mock()
-        term.handle = Mock()
+        term.out_handle = Mock()
+
         term.set_console()
+
         self.assertEquals(
             mockWindll.kernel32.SetConsoleTextAttribute.call_args,
-            ((term.handle, term.combined_attrs), {})
+            ((term.out_handle, term.combined_attrs), {})
         )
 
+    @patch('colorama.winterm.windll')
+    def testSetConsoleOnStderr(self, mockWindll):
+        term = WinTerm()
+        term.windll = Mock()
+        term.err_handle = Mock()
+
+        term.set_console(stderr=True)
+        
+        self.assertEquals(
+            mockWindll.kernel32.SetConsoleTextAttribute.call_args,
+            ((term.err_handle, term.combined_attrs), {})
+        )
+        
 
 if __name__ == '__main__':
     main()

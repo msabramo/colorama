@@ -13,12 +13,12 @@ class AnsiToWin32(object):
     def __init__(self, wrapped, autoreset=False):
         self.wrapped = wrapped
         self.autoreset = autoreset
-        self.enabled = sys.platform.startswith('win')
+        self.convert = sys.platform.startswith('win')
         self.win32_calls = self.get_win32_calls()
         self.stderr = self.wrapped is sys.stderr
 
     def get_win32_calls(self):
-        if self.enabled and winterm:
+        if self.convert and winterm:
             return {
                 AnsiStyle.RESET_ALL: (winterm.reset_all, ),
                 AnsiStyle.BRIGHT: (winterm.style, WinStyle.BRIGHT),
@@ -43,8 +43,6 @@ class AnsiToWin32(object):
                 AnsiBack.WHITE: (winterm.back, WinColor.GREY),
                 AnsiBack.RESET: (winterm.back, ),
             }
-        else:
-            return {}
 
 
     def __getattr__(self, name):
@@ -52,14 +50,14 @@ class AnsiToWin32(object):
 
 
     def reset_all(self):
-        if self.enabled:
+        if self.convert:
             self.call_win32('m', [0])
         else:
             self.wrapped.write(Style.RESET_ALL)
 
 
     def write(self, text):
-        if self.enabled:
+        if self.convert:
             self.write_and_convert(text)
         else:
             self.wrapped.write(text)

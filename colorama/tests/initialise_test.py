@@ -36,8 +36,8 @@ class InitTest(TestCase):
         self.assertNotEqual(type(sys.stdout), AnsiToWin32)
         self.assertNotEqual(type(sys.stderr), AnsiToWin32)
 
-    @patch('colorama.ansitowin32.WinTerm')
-    def testInitWrapsOnWindows(self, _):
+    @patch('colorama.ansitowin32.winterm', None)
+    def testInitWrapsOnWindows(self):
         with platform('windows'):
             init()
             self.assertWrapped()
@@ -57,8 +57,8 @@ class InitTest(TestCase):
             init(wrap=False)
             self.assertNotWrapped()
 
-    @patch('colorama.ansitowin32.WinTerm')
-    def testInitWrapOffWillUnwrapIfRequired(self, _):
+    @patch('colorama.ansitowin32.winterm', None)
+    def testInitWrapOffWillUnwrapIfRequired(self):
         with platform('windows'):
             init()
             init(wrap=False)
@@ -67,8 +67,8 @@ class InitTest(TestCase):
     def testInitWrapOffIncompatibleWithAutoresetOn(self):
         self.assertRaises(ValueError, lambda: init(autoreset=True, wrap=False))
 
-    @patch('colorama.ansitowin32.WinTerm')
-    def testInitOnlyWrapsOnce(self, _):
+    @patch('colorama.ansitowin32.winterm', None)
+    def testInitOnlyWrapsOnce(self):
         with platform('windows'):
             init()
             init()
