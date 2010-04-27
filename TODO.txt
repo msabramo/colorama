@@ -1,0 +1,25 @@
+
+see Roger thingy's email about only wrapping if isatty()
+
+Make it python3 compatible.
+
+Add other ANSI sequences: clear screen, move text cursor.
+
+There are other formats of ANSI sequences. See the wikipedia article on them,
+and also the ANSI codes used in Peter Norvig's .pythonstartup.py, at the bottom
+of: http://norvig.com/python-iaq.html
+
+Figure out why colorama.init() doesn't work for ANSI sequences printed
+by the python interactive interpreter. It is using raw_input to print
+the prompt. Does that bypass sys.stdout somehow?
+
+Can we make curses work windows?
+
+Use distribute instead of distutils
+
+Consider whether aspects of demo.py shouldn't be provided by colorama. Eg.
+a collection of all foreground colors and names.
+
+Consider replacing our enum classes with Peter Norvig's class Struct, from:
+http://norvig.com/python-iaq.html
+

@@ -9,7 +9,6 @@ def code_to_chars(code):
     return CSI + str(code) + 'm'
 
 class AnsiCodes(object):
-
     def __init__(self, codes):
         for name in dir(codes):
             if not name.startswith('_'):
