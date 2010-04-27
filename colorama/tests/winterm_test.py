@@ -14,9 +14,6 @@ class WinTermTest(TestCase):
         self.assertEquals(term._back, WinColor.BLACK) 
         self.assertEquals(term._style, WinStyle.NORMAL) 
 
-    def testDefaults(self):
-        self.fail('default fore, back & style should use terminal current')
-
     def testCombinedAttrs(self):
         term = WinTerm()
 

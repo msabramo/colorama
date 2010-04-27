@@ -10,9 +10,6 @@ from ..ansitowin32 import AnsiToWin32
 
 class AnsiToWin32Test(TestCase):
 
-    def tearDown(self):
-        pass # TODO winterm.reset_all()
-
     def testInit(self):
         mockStdout = object()
         auto = object()

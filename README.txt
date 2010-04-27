@@ -18,11 +18,10 @@ applications or libraries which use ANSI sequences to produce colored output on
 Linux or Macs can now also work on Windows, simply by calling
 ``colorama.init()``.
 
-
 Dependencies
 ============
 
-None, other than Python. Tested on Python 2.6.5.
+None, other than Python. Tested on Python 2.6.5. Does not yet work on Python 3.
 
 
 Usage
@@ -124,19 +123,27 @@ Only tested on WinXP (CMD, Console2) and Ubuntu (gnome-terminal, xterm). Much
 obliged if anyone can let me know how it fares elsewhere, in particular on
 Macs.
 
-    On Linux terminals, scrolling fills the whole new line with the current
-    background color. On Windows, the new line is filled with the default
-    background color.
+See outstanding bugs, refactoring and wishlist in TODO.txt.
+(http://code.google.com/p/colorama/source/browse/TODO.txt)
 
-    On Linux, the foreground color has dim / normal / bright settings, but
-    the background is unaffected. On Windows, both foreground and background
-    have independent normal / bright settings. Mapping between these two is
-    wrinkly. See screenshots at http://tartley.com/?p=1062.
+Some differences between Windows and other terminals exist, which Colorama
+currently makes no attempt to meddle with:
 
-    On Linux terminals, the 'RESET' background and foreground colors are
-    potentially distinct from all other colors. On Windows, Back.RESET
-    and Fore.RESET produce an RGB which is indistinguishable from one of
-    the other color entries.
+On Linux terminals, scrolling fills the whole new line with the current
+background color. On Windows, the new line is filled with the default
+background color.
+
+On Linux, the foreground color has dim / normal / bright settings, but
+the background is constant. On Windows, both foreground and background
+have independent normal / bright settings. Colorama maps 'bright' ANSI codes to
+use a bright background color on Windows, to emulate the missing third level of
+brightness. This might cause unexpected uglyness for particular existing
+applications. See screenshots at http://tartley.com/?p=1062.
+
+On Linux terminals, the 'RESET' background and foreground colors are
+potentially distinct from all other colors. On Windows, Back.RESET and
+Fore.RESET produce an RGB which is indistinguishable from one of the other
+color entries.
 
 Only the colors and dim/bright subset of ANSI 'm' commands are recognised.
 There are many other ANSI sequences (eg. moving cursor position) that could
@@ -156,6 +163,8 @@ using::
 Changes
 =======
 
+0.1.6
+    
 0.1.5
     Now works on Ubuntu.
 0.1.4
