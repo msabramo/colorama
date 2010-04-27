@@ -98,7 +98,7 @@ class WinTermTest(TestCase):
         term.windll = Mock()
         term.err_handle = Mock()
 
-        term.set_console(stderr=True)
+        term.set_console(on_stderr=True)
         
         self.assertEquals(
             mockWindll.kernel32.SetConsoleTextAttribute.call_args,

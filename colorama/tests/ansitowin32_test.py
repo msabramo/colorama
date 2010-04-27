@@ -18,39 +18,39 @@ class AnsiToWin32Test(TestCase):
         self.assertEquals(stream.autoreset, auto)
 
     @patch('colorama.ansitowin32.winterm', None)
-    def testConvertTrueOnWindows(self):
+    def testStripIsTrueOnWindows(self):
         with platform('windows'):
             stream = AnsiToWin32(None)
-            self.assertTrue(stream.convert)
+            self.assertTrue(stream.strip)
 
-    def testConvertFalseOffWindows(self):
+    def testStripIsFalseOffWindows(self):
         with platform('darwin'):
             stream = AnsiToWin32(None)
-            self.assertFalse(stream.convert)
+            self.assertFalse(stream.strip)
 
     def testIsAProxy(self):
         mock = Mock()
         atw32 = AnsiToWin32( mock )
         self.assertTrue( atw32.random_attr is mock.random_attr )
 
-    def testWriteConvertsIfConverting(self):
+    def testWriteStripsAnsi(self):
         mockStdout = Mock()
         stream = AnsiToWin32(mockStdout)
         stream.wrapped = Mock()
         stream.write_and_convert = Mock()
-        stream.convert = True
+        stream.strip = True
 
         stream.write('abc')
 
         self.assertFalse(stream.wrapped.write.called)
         self.assertEquals(stream.write_and_convert.call_args, (('abc',), {}))
 
-    def testWriteDoesNotConvertIfDisabled(self):
+    def testWriteDoesNotStripAnsi(self):
         mockStdout = Mock()
         stream = AnsiToWin32(mockStdout)
         stream.wrapped = Mock()
         stream.write_and_convert = Mock()
-        stream.convert = False
+        stream.strip = False
 
         stream.write('abc')
         
