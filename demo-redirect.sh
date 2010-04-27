@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 
-python 2>out <<EOF
+python 2>err <<EOF
 import sys
 from colorama import init, Fore
 
 init()
 
-print >>sys.stdout, Fore.RED + 'Red stdout, ',
-print >>sys.stderr, Fore.BLUE + 'Blue stderr,',
-print >>sys.stdout, 'Further stdout should be red'
+print Fore.RED + 'Red stdout.',
+print >>sys.stderr, Fore.BLUE + 'ANSI stripped from blue stderr.'
+print 'Further stdout should be red'
 EOF
+
+echo 'and the redirected stderr:'
+cat err
+
+rm -rf err out
 

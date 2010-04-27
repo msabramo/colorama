@@ -30,7 +30,7 @@ class WinStyle(object):
 
 class WinTerm(object):
 
-    def __init__(self, stderr=False):
+    def __init__(self):
         self.default_attrs()
         if windll:
             self.out_handle = windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
@@ -45,29 +45,29 @@ class WinTerm(object):
         self._back = WinColor.BLACK
         self._style = WinStyle.NORMAL
 
-    def reset_all(self, stderr=None):
+    def reset_all(self, on_stderr=None):
         self.default_attrs()
         self.set_console()
 
-    def fore(self, fore=None, stderr=False):
+    def fore(self, fore=None, on_stderr=False):
         if fore is None:
             fore = WinColor.GREY
         self._fore = fore
-        self.set_console(stderr=stderr)
+        self.set_console(on_stderr=on_stderr)
 
-    def back(self, back=None, stderr=False):
+    def back(self, back=None, on_stderr=False):
         if back is None:
             back = WinColor.BLACK
         self._back = back
-        self.set_console(stderr=stderr)
+        self.set_console(on_stderr=on_stderr)
 
-    def style(self, style=None, stderr=False):
+    def style(self, style=None, on_stderr=False):
         self._style = style
-        self.set_console(stderr=stderr)
+        self.set_console(on_stderr=on_stderr)
 
-    def set_console(self, stderr=False):
+    def set_console(self, on_stderr=False):
         if windll:
-            handle = self.err_handle if stderr else self.out_handle
+            handle = self.err_handle if on_stderr else self.out_handle
             windll.kernel32.SetConsoleTextAttribute(handle, self.combined_attrs)
 
 

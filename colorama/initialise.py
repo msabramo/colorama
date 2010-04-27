@@ -11,6 +11,7 @@ orig_stderr = sys.stderr
 @atexit.register
 def reset_all():
     AnsiToWin32(orig_stdout).reset_all()
+    AnsiToWin32(orig_stderr).reset_all()
 
 
 def init(autoreset=False, wrap=True):

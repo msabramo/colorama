@@ -13,9 +13,13 @@ class AnsiToWin32(object):
     def __init__(self, wrapped, autoreset=False):
         self.wrapped = wrapped
         self.autoreset = autoreset
-        self.convert = sys.platform.startswith('win')
+        self.strip = sys.platform.startswith('win')
+        self.convert = (
+            self.strip and
+            hasattr(self.wrapped, 'isatty') and
+            self.wrapped.isatty())
         self.win32_calls = self.get_win32_calls()
-        self.stderr = self.wrapped is sys.stderr
+        self.on_stderr = self.wrapped is sys.stderr
 
     def get_win32_calls(self):
         if self.convert and winterm:
@@ -57,7 +61,7 @@ class AnsiToWin32(object):
 
 
     def write(self, text):
-        if self.convert:
+        if self.strip:
             self.write_and_convert(text)
         else:
             self.wrapped.write(text)
@@ -71,9 +75,10 @@ class AnsiToWin32(object):
             start, end = match.span()
             self.write_snippet(text, cursor, start)
 
-            paramstring, command = match.groups()
-            params = self.extract_params(paramstring)
-            self.call_win32(command, params)
+            if self.convert:
+                paramstring, command = match.groups()
+                params = self.extract_params(paramstring)
+                self.call_win32(command, params)
 
             cursor = end
 
@@ -102,5 +107,5 @@ class AnsiToWin32(object):
                     func_args = self.win32_calls[param]
                     func = func_args[0]
                     args = func_args[1:]
-                    func(*args, stderr=self.stderr)
+                    func(*args, on_stderr=self.on_stderr)
 
