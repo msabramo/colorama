@@ -6,10 +6,6 @@ from .ansi import AnsiFore, AnsiBack, AnsiStyle, Style
 from .winterm import WinColor, WinStyle, WinTerm
 
 
-def reset_all():
-    sys.stdout.write(Style.RESET_ALL)
-
-
 class AnsiToWin32(object):
 
     ANSI_RE = re.compile('\033\[((?:\d|;)*)([a-zA-Z])')
@@ -55,13 +51,20 @@ class AnsiToWin32(object):
         return getattr(self.wrapped, name)
 
 
+    def reset_all(self):
+        if self.enabled:
+            self.call_win32('m', [0])
+        else:
+            self.wrapped.write(Style.RESET_ALL)
+
+
     def write(self, text):
         if self.enabled:
             self.write_and_convert(text)
         else:
             self.wrapped.write(text)
-        if self.autoreset and text != Style.RESET_ALL:
-            reset_all()
+        if self.autoreset:
+            self.reset_all()
 
 
     def write_and_convert(self, text):
@@ -93,6 +96,8 @@ class AnsiToWin32(object):
 
 
     def call_win32(self, command, params):
+        if params == []:
+            params = [0]
         if command == 'm':
             for param in params:
                 if param in self.win32_calls:

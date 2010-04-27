@@ -1,11 +1,16 @@
-import sys
 import atexit
+import sys
 
-from .ansitowin32 import AnsiToWin32, reset_all
+from .ansitowin32 import AnsiToWin32
 
 
 orig_stdout = sys.stdout
 orig_stderr = sys.stderr
+
+
+@atexit.register
+def reset_all():
+    AnsiToWin32(orig_stdout).reset_all()
 
 
 def init(autoreset=False, wrap=True):
@@ -19,8 +24,6 @@ def init(autoreset=False, wrap=True):
     else:
         sys.stdout = orig_stdout
         sys.stderr = orig_stderr
-
-    atexit.register(reset_all)
 
 
 def wrap_stream(stream, autoreset):

@@ -1,6 +1,4 @@
 
-tests should not change console color (are ok on ubuntu)
-
 stream wrapper should be minimal - other functionality extracted to new
 class
 
@@ -19,6 +17,9 @@ by the python interactive interpreter. It is using raw_input to print
 the prompt. Does that bypass sys.stdout somehow?
 
 Can we make curses work windows?
+
+consider whether to scrap support for dim (or bright) in order to use
+constant background brightness settings. Make this optional?
 
 Use distribute instead of distutils
 

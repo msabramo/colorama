@@ -60,17 +60,17 @@ class AnsiToWin32Test(TestCase):
         self.assertFalse(stream.write_and_convert.called)
         self.assertEquals(stream.wrapped.write.call_args, (('abc',), {}))
 
-    @patch('colorama.ansitowin32.reset_all')
-    def assert_autoresets(self, enabled, mockResetAll):
+    def assert_autoresets(self, enabled):
         stream = AnsiToWin32(Mock())
         stream.enabled = enabled
+        stream.reset_all = Mock()
         stream.write_and_convert = Mock()
         stream.autoreset = True
         stream.winterm = Mock()
 
         stream.write('abc')
         
-        self.assertTrue( mockResetAll.called )
+        self.assertTrue( stream.reset_all.called )
 
     def testWriteAutoresetsIfEnabled(self):
         self.assert_autoresets(True)
@@ -158,7 +158,7 @@ class AnsiToWin32Test(TestCase):
 
     def testCallWin32UsesLookup(self):
         listener = Mock()
-        stream = AnsiToWin32(Mock())
+        stream = AnsiToWin32(listener)
         stream.win32_calls = {
             1: lambda: listener(11),
             2: lambda: listener(22),
@@ -168,6 +168,15 @@ class AnsiToWin32Test(TestCase):
         self.assertEquals(
             [a[0][0] for a in listener.call_args_list],
             [33, 11, 22] )
+
+    def testCallWin32DefaultsToParams0(self):
+        mockStdout = Mock()
+        stream = AnsiToWin32(mockStdout)
+        stream.win32_calls = {0: mockStdout.reset}
+        
+        stream.call_win32('m', [])
+
+        self.assertTrue(mockStdout.reset.called)
 
 
 if __name__ == '__main__':
