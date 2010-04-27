@@ -2,14 +2,16 @@
 import sys
 from unittest2 import TestCase, main
 
-from mock import Mock, patch
+from mock import patch
 
 from .utils import platform
 
-from .. import init, AnsiToWin32
+from ..initialise import init, AnsiToWin32
+
 
 stdout_orig = sys.stdout
 stderr_orig = sys.stderr
+
 
 class InitTest(TestCase):
 

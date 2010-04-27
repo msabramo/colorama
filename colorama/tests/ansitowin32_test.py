@@ -1,19 +1,11 @@
 
-from contextlib import contextmanager
-import sys
 from unittest2 import TestCase, main
-
-import colorama
-from colorama import AnsiToWin32
 
 from mock import Mock, patch
 
-@contextmanager
-def platform(name):
-    orig = sys.platform
-    sys.platform = name
-    yield
-    sys.platform = orig
+from .utils import platform
+
+from ..ansitowin32 import AnsiToWin32
 
 
 class AnsiToWin32Test(TestCase):
@@ -68,18 +60,23 @@ class AnsiToWin32Test(TestCase):
         self.assertFalse(stream.write_and_convert.called)
         self.assertEquals(stream.wrapped.write.call_args, (('abc',), {}))
 
-    def testWriteAutoresetsIfOn(self):
+    @patch('colorama.ansitowin32.reset_all')
+    def assert_autoresets(self, enabled, mockResetAll):
         stream = AnsiToWin32(Mock())
-        stream.enabled = True
+        stream.enabled = enabled
         stream.write_and_convert = Mock()
         stream.autoreset = True
         stream.winterm = Mock()
 
         stream.write('abc')
         
-        self.assertEqual(
-            stream.winterm.method_calls[-1],
-            ('reset_all', (), {}) )
+        self.assertTrue( mockResetAll.called )
+
+    def testWriteAutoresetsIfEnabled(self):
+        self.assert_autoresets(True)
+
+    def testWriteAutoresetsIfDisabled(self):
+        self.assert_autoresets(False)
 
     def testWriteDoesntAutoresetIfOff(self):
         stream = AnsiToWin32(Mock())

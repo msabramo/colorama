@@ -6,12 +6,12 @@ from colorama import init, Fore, Back, Style
 
 init()
 
-print Fore.GREEN + 'green' + Fore.RED + 'red' + Fore.RESET + 'normal'
-print Back.GREEN + 'green' + Back.RED + 'red' + Back.RESET + 'normal'
-print Style.DIM + 'dim',
-print Style.NORMAL + 'normal',
-print Style.BRIGHT + 'bright'
-print Style.NORMAL
+print Fore.GREEN + 'green' + Fore.RED + 'red' + Fore.RESET + 'normal',
+print Back.GREEN + 'green' + Back.RED + 'red' + Back.RESET + 'normal',
+print Style.DIM + 'dim' + \
+    Style.NORMAL + 'normal' + \
+    Style.BRIGHT + 'bright'
+print Style.RESET_ALL
 
 FORES = [
     Fore.BLACK,
@@ -22,10 +22,8 @@ FORES = [
     Fore.MAGENTA,
     Fore.CYAN,
     Fore.WHITE,
-    Fore.RESET,
 ]
 BACKS = [
-    Back.RESET,
     Back.BLACK,
     Back.RED,
     Back.GREEN,
@@ -84,9 +82,13 @@ for background in BACKS:
 
     print Style.RESET_ALL
 
+init(autoreset=True)
+
 print
-print Fore.YELLOW + Back.BLUE + Style.NORMAL + \
+print Fore.CYAN + Back.MAGENTA + Style.BRIGHT + 'colored', 'autoreset'
+
+init(autoreset=False)
+print Fore.YELLOW + Back.BLUE + Style.BRIGHT + \
     'Should reset to default colors atexit...'
 print
-
 

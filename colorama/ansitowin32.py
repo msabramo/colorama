@@ -2,9 +2,12 @@
 import re
 import sys
 
-from .ansi import AnsiFore, AnsiBack, AnsiStyle
-
+from .ansi import AnsiFore, AnsiBack, AnsiStyle, Style
 from .winterm import WinColor, WinStyle, WinTerm
+
+
+def reset_all():
+    sys.stdout.write(Style.RESET_ALL)
 
 
 class AnsiToWin32(object):
@@ -15,10 +18,11 @@ class AnsiToWin32(object):
         self.wrapped = wrapped
         self.autoreset = autoreset
         self.enabled = sys.platform.startswith('win')
+        self.winterm = None
+        self.win32_calls = {}
         if self.enabled:
             self.winterm = WinTerm()
             self.win32_calls = self.get_win32_calls(self.winterm)
-
 
     def get_win32_calls(self, winterm):
         return {
@@ -54,10 +58,10 @@ class AnsiToWin32(object):
     def write(self, text):
         if self.enabled:
             self.write_and_convert(text)
-            if self.autoreset:
-                self.winterm.reset_all()
         else:
             self.wrapped.write(text)
+        if self.autoreset and text != Style.RESET_ALL:
+            reset_all()
 
 
     def write_and_convert(self, text):

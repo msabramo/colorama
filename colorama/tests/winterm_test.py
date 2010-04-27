@@ -1,9 +1,10 @@
 
 from unittest2 import TestCase, main
 
-from mock import patch, Mock
+from mock import Mock, patch
 
 from ..winterm import WinColor, WinStyle, WinTerm
+
 
 class WinTermTest(TestCase):
 
@@ -81,13 +82,14 @@ class WinTermTest(TestCase):
         self.assertEquals(term._style, 22)
         self.assertEquals(term.set_console.called, True)
 
-    def testSetConsole(self):
+    @patch('colorama.winterm.windll')
+    def testSetConsole(self, mockWindll):
         term = WinTerm()
         term.windll = Mock()
         term.handle = Mock()
         term.set_console()
         self.assertEquals(
-            term.windll.kernel32.SetConsoleTextAttribute.call_args,
+            mockWindll.kernel32.SetConsoleTextAttribute.call_args,
             ((term.handle, term.combined_attrs), {})
         )
 

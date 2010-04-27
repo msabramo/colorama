@@ -1,4 +1,9 @@
 
+tests should not change console color (are ok on ubuntu)
+
+stream wrapper should be minimal - other functionality extracted to new
+class
+
 see Roger thingy's email about only wrapping if isatty()
 
 Make it python3 compatible.

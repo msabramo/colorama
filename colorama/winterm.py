@@ -30,7 +30,6 @@ class WinTerm(object):
 
     def __init__(self):
         self.default_attrs()
-        self.windll = windll
         if windll:
             self.handle = windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
 
@@ -64,7 +63,7 @@ class WinTerm(object):
         self.set_console()
 
     def set_console(self):
-        if self.windll:
-            self.windll.kernel32.SetConsoleTextAttribute(
+        if windll:
+            windll.kernel32.SetConsoleTextAttribute(
                 self.handle, self.combined_attrs)
 
