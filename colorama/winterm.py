@@ -1,12 +1,14 @@
 
+windll = None
 try:
     from ctypes import windll
 except ImportError:
-    windll = None
+    pass
 
 
 # from winbase.h
 STD_OUTPUT_HANDLE= -11
+STD_ERROR_HANDLE= -12
 
 # from wincon.h
 class WinColor(object):
@@ -28,10 +30,11 @@ class WinStyle(object):
 
 class WinTerm(object):
 
-    def __init__(self):
+    def __init__(self, stderr=False):
         self.default_attrs()
         if windll:
-            self.handle = windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
+            self.out_handle = windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
+            self.err_handle = windll.kernel32.GetStdHandle(STD_ERROR_HANDLE)
 
     @property
     def combined_attrs(self):
@@ -42,28 +45,31 @@ class WinTerm(object):
         self._back = WinColor.BLACK
         self._style = WinStyle.NORMAL
 
-    def reset_all(self):
+    def reset_all(self, stderr=None):
         self.default_attrs()
         self.set_console()
 
-    def fore(self, fore=None):
+    def fore(self, fore=None, stderr=False):
         if fore is None:
             fore = WinColor.GREY
         self._fore = fore
-        self.set_console()
+        self.set_console(stderr=stderr)
 
-    def back(self, back=None):
+    def back(self, back=None, stderr=False):
         if back is None:
             back = WinColor.BLACK
         self._back = back
-        self.set_console()
+        self.set_console(stderr=stderr)
 
-    def style(self, style=None):
+    def style(self, style=None, stderr=False):
         self._style = style
-        self.set_console()
+        self.set_console(stderr=stderr)
 
-    def set_console(self):
+    def set_console(self, stderr=False):
         if windll:
-            windll.kernel32.SetConsoleTextAttribute(
-                self.handle, self.combined_attrs)
+            handle = self.err_handle if stderr else self.out_handle
+            windll.kernel32.SetConsoleTextAttribute(handle, self.combined_attrs)
+
+
+winterm = WinTerm()
 

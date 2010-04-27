@@ -2,9 +2,9 @@
 BUGS
 ----
 
-Should only wrap output if stdout.isatty(). This will stop it working when
-running under nosetests though, since that also wraps stdout with a StringIO,
-which doesn't have an isatty attribute. Not sure how to tackle this.
+If not stdout.isatty(), should not issue win32 calls on windows. Unless we're
+running under nosetests, in which case stdout is a StringIO, which doesn't
+have isatty().
 
 Does not recognise other formats of ANSI sequences. See the wikipedia article
 on them, and also the ANSI codes used in Peter Norvig's .pythonstartup.py, at
@@ -40,5 +40,6 @@ Consider whether aspects of demo.py shouldn't be provided by colorama. Eg.
 a collection of all foreground colors and names.
 
 Consider replacing our enum classes with something like Norvig's class Struct,
-from: http://norvig.com/python-iaq.html
+from: http://norvig.com/python-iaq.html, if it can either give us color names
+or an easy way to generate 'ALL' collections.
 

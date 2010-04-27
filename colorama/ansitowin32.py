@@ -3,7 +3,7 @@ import re
 import sys
 
 from .ansi import AnsiFore, AnsiBack, AnsiStyle, Style
-from .winterm import WinColor, WinStyle, WinTerm
+from .winterm import winterm, WinColor, WinStyle
 
 
 class AnsiToWin32(object):
@@ -14,37 +14,37 @@ class AnsiToWin32(object):
         self.wrapped = wrapped
         self.autoreset = autoreset
         self.enabled = sys.platform.startswith('win')
-        self.winterm = None
-        self.win32_calls = {}
-        if self.enabled:
-            self.winterm = WinTerm()
-            self.win32_calls = self.get_win32_calls(self.winterm)
+        self.win32_calls = self.get_win32_calls()
+        self.stderr = self.wrapped is sys.stderr
 
-    def get_win32_calls(self, winterm):
-        return {
-            AnsiStyle.RESET_ALL: lambda: winterm.reset_all(),
-            AnsiStyle.BRIGHT: lambda: winterm.style(WinStyle.BRIGHT),
-            AnsiStyle.DIM: lambda: winterm.style(WinStyle.DIM),
-            AnsiStyle.NORMAL: lambda: winterm.style(WinStyle.NORMAL),
-            AnsiFore.BLACK: lambda: winterm.fore(WinColor.BLACK),
-            AnsiFore.RED: lambda: winterm.fore(WinColor.RED),
-            AnsiFore.GREEN: lambda: winterm.fore(WinColor.GREEN),
-            AnsiFore.YELLOW: lambda: winterm.fore(WinColor.YELLOW),
-            AnsiFore.BLUE: lambda: winterm.fore(WinColor.BLUE),
-            AnsiFore.MAGENTA: lambda: winterm.fore(WinColor.MAGENTA),
-            AnsiFore.CYAN: lambda: winterm.fore(WinColor.CYAN),
-            AnsiFore.WHITE: lambda: winterm.fore(WinColor.GREY),
-            AnsiFore.RESET: lambda: winterm.fore(),
-            AnsiBack.BLACK: lambda: winterm.back(WinColor.BLACK),
-            AnsiBack.RED: lambda: winterm.back(WinColor.RED),
-            AnsiBack.GREEN: lambda: winterm.back(WinColor.GREEN),
-            AnsiBack.YELLOW: lambda: winterm.back(WinColor.YELLOW),
-            AnsiBack.BLUE: lambda: winterm.back(WinColor.BLUE),
-            AnsiBack.MAGENTA: lambda: winterm.back(WinColor.MAGENTA),
-            AnsiBack.CYAN: lambda: winterm.back(WinColor.CYAN),
-            AnsiBack.WHITE: lambda: winterm.back(WinColor.GREY),
-            AnsiBack.RESET: lambda: winterm.back(),
-        }
+    def get_win32_calls(self):
+        if self.enabled and winterm:
+            return {
+                AnsiStyle.RESET_ALL: (winterm.reset_all, ),
+                AnsiStyle.BRIGHT: (winterm.style, WinStyle.BRIGHT),
+                AnsiStyle.DIM: (winterm.style, WinStyle.DIM),
+                AnsiStyle.NORMAL: (winterm.style, WinStyle.NORMAL),
+                AnsiFore.BLACK: (winterm.fore, WinColor.BLACK),
+                AnsiFore.RED: (winterm.fore, WinColor.RED),
+                AnsiFore.GREEN: (winterm.fore, WinColor.GREEN),
+                AnsiFore.YELLOW: (winterm.fore, WinColor.YELLOW),
+                AnsiFore.BLUE: (winterm.fore, WinColor.BLUE),
+                AnsiFore.MAGENTA: (winterm.fore, WinColor.MAGENTA),
+                AnsiFore.CYAN: (winterm.fore, WinColor.CYAN),
+                AnsiFore.WHITE: (winterm.fore, WinColor.GREY),
+                AnsiFore.RESET: (winterm.fore, ),
+                AnsiBack.BLACK: (winterm.back, WinColor.BLACK),
+                AnsiBack.RED: (winterm.back, WinColor.RED),
+                AnsiBack.GREEN: (winterm.back, WinColor.GREEN),
+                AnsiBack.YELLOW: (winterm.back, WinColor.YELLOW),
+                AnsiBack.BLUE: (winterm.back, WinColor.BLUE),
+                AnsiBack.MAGENTA: (winterm.back, WinColor.MAGENTA),
+                AnsiBack.CYAN: (winterm.back, WinColor.CYAN),
+                AnsiBack.WHITE: (winterm.back, WinColor.GREY),
+                AnsiBack.RESET: (winterm.back, ),
+            }
+        else:
+            return {}
 
 
     def __getattr__(self, name):
@@ -101,5 +101,8 @@ class AnsiToWin32(object):
         if command == 'm':
             for param in params:
                 if param in self.win32_calls:
-                    self.win32_calls[param]()
+                    func_args = self.win32_calls[param]
+                    func = func_args[0]
+                    args = func_args[1:]
+                    func(*args, stderr=self.stderr)
 
