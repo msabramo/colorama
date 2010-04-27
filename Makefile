@@ -13,7 +13,7 @@ release: clean
 .PHONY: release
 
 test:
-	-unit2 discover -p "*_test.py"
+	-nosetests
 .PHONY: test
 
 tags:
