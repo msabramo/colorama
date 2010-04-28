@@ -2,40 +2,60 @@
 BUGS
 ----
 
-Does not recognise other formats of ANSI sequences. See the wikipedia article
-on them, and also the ANSI codes used in Peter Norvig's .pythonstartup.py, at
-the bottom of: http://norvig.com/python-iaq.html
+Suspect that it currently does not filter out ansi to redirected streams
+when running on linux. Test this out - does the shell do it for us or
+something? (works ok on windows)
+
+Aha! Current passing of 'stderr=True or False' should be replaced by tri-state,
+stderr, stdout or None (some other stream). If None, we do not issue any win32
+calls. This path would be used for printing to AnsiToWin32(someotherstream).
+
+Does not recognise or strip other formats of ANSI sequences, ie.single char
+sequences, alternative CSI, etc. See the wikipedia article on them, and also
+the ANSI codes used in Peter Norvig's .pythonstartup.py, at the bottom of:
+http://norvig.com/python-iaq.html - they seem to contain a colon (not
+semicolon)
 
 fore, back and style should reset to their initial values, not black/white
+
 
 REFACTOR
 --------
 
 stream wrapper should be minimal - other functionality extracted to a new
-class
+class. Also, lots of methods seem to be of the form:
+
+    if enabled:
+        do this
+    else
+        do that
+
+which suggests some polymorphism might be in order.
 
 Use distribute instead of distutils
 
-WISHLIST
+Consider replacing our enum classes with something like Norvig's class Struct,
+from: http://norvig.com/python-iaq.html, if it can either give us color names
+or an easy way to generate 'ALL' collections.
+
+
+FEATURES
 --------
 
 Make it python3 compatible.
 
 Add support for other ANSI sequences: clear screen, move text cursor.
 
+Can we make curses work in windows?
+
 Figure out why colorama.init() doesn't work for ANSI sequences printed
 by the python interactive interpreter. It is using raw_input to print
 the prompt. Does that bypass sys.stdout somehow?
 
-Can we make curses work in windows?
-
 Consider whether to scrap support for dim (or bright) in order to use
-constant background brightness settings. Make this optional?
+constant background brightness settings. Make this optional? Use bold to
+represent bright instead?
 
 Consider whether aspects of demo.py shouldn't be provided by colorama. Eg.
 a collection of all foreground colors and names.
-
-Consider replacing our enum classes with something like Norvig's class Struct,
-from: http://norvig.com/python-iaq.html, if it can either give us color names
-or an easy way to generate 'ALL' collections.
 
