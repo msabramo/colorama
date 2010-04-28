@@ -9,22 +9,6 @@
 # behaviour on exit, which resets default colors again.
 
 
-# example of common usage
-python 2>err <<EOF
-import sys
-from colorama import init, Fore, Back, Style
-
-init()
-
-print Fore.GREEN + 'green' + Fore.RED + 'red' + Fore.RESET + 'normal',
-print Back.GREEN + 'green' + Back.RED + 'red' + Back.RESET + 'normal',
-print Style.DIM + 'dim' + \
-    Style.NORMAL + 'normal' + \
-    Style.BRIGHT + 'bright'
-print Style.RESET_ALL
-EOF
-
-
 # print grid of all colors and brightnesses
 # uses stdout.write to write chars with no newline nor spaces between them
 python 2>err <<EOF2
@@ -104,16 +88,26 @@ print
 EOF2
 
 
+# example of common usage
+python 2>err <<EOF
+from colorama import init, Fore, Back, Style
+
+init()
+
+print Fore.GREEN + 'green' + Fore.RED + 'red' + Fore.RESET + 'normal',
+print Back.GREEN + 'green' + Back.RED + 'red' + Back.RESET + 'normal',
+print Style.DIM + 'dim' + \
+    Style.NORMAL + 'normal' + \
+    Style.BRIGHT + 'bright',
+EOF
+
+
 # check autoreset works
 # check reset_all is called at exit
 python <<EOF3
-import sys
 from colorama import init, Fore, Back, Style
-
 init(autoreset=True)
-print
 print Fore.CYAN + Back.MAGENTA + Style.BRIGHT + 'colored', 'autoreset'
-
 init(autoreset=False)
 print Fore.YELLOW + Back.BLUE + Style.BRIGHT + 'colored',
 EOF3
@@ -122,10 +116,8 @@ echo 'reset at exit'
 
 # check ANSI is stripped from redirected stdout
 python >out <<EOF4
-import sys
 from colorama import init, Fore
 init()
-
 print Fore.RED + 'redirected stdout should contain no ansi'
 EOF4
 cat out
@@ -133,18 +125,24 @@ cat out
 
 # check that ANSI is stripped from redirected stderr, and that stripped ANSI in
 # redirected stderr does not affect stdout
-python 2>err <<EOF2
+python 2>err <<EOF5
 import sys
 from colorama import init, Fore
-
 init()
-
 print Fore.RED + 'Red stdout.',
 print >>sys.stderr, Fore.BLUE + 'redirected stderr should contain no ansi'
-
 print 'Further stdout should also be red'
-EOF2
+EOF5
 cat err
+
+
+# use without wrapping stdout
+python <<EOF6
+import sys
+from colorama import AnsiToWin32, init, Fore
+init(wrap=False)
+print >>AnsiToWin32(sys.stdout), Fore.CYAN + 'Cyan without wrapping stdout'
+EOF6
 
 
 # clean up
