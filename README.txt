@@ -150,6 +150,7 @@ There are many other ANSI sequences (eg. moving cursor position.) These are
 currently silently stripped from the output on Windows.
 
 
+
 Development
 ===========
 
@@ -157,6 +158,10 @@ Tests require Michael Foord's modules 'unittest2' and 'mock', running tests
 using::
 
     unit2 discover -p '*_test.py'
+
+Colorama does not play nice with nosetests. Nose captures stdout by wrapping
+it in a StringIO, which confuses colorama's unit tests' expectations about the
+identity of stdout.
 
 
 Changes
