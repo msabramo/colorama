@@ -5,7 +5,23 @@ from mock import Mock, patch
 
 from .utils import platform
 
-from ..ansitowin32 import AnsiToWin32
+from ..ansi import Style
+from ..ansitowin32 import AnsiToWin32, StreamWrapper
+
+
+class StreamWrapperTest(TestCase):
+
+    def testIsAProxy(self):
+        mockStream = Mock()
+        wrapper = StreamWrapper(mockStream, None)
+        self.assertTrue( wrapper.random_attr is mockStream.random_attr )
+
+    def testDelegatesWrite(self):
+        mockStream = Mock()
+        mockConverter = Mock()
+        wrapper = StreamWrapper(mockStream, mockConverter)
+        wrapper.write('hello')
+        self.assertTrue(mockConverter.write.call_args, (('hello',), {}))
 
 
 class AnsiToWin32Test(TestCase):
@@ -28,10 +44,6 @@ class AnsiToWin32Test(TestCase):
             stream = AnsiToWin32(None)
             self.assertFalse(stream.strip)
 
-    def testIsAProxy(self):
-        mock = Mock()
-        atw32 = AnsiToWin32( mock )
-        self.assertTrue( atw32.random_attr is mock.random_attr )
 
     def testWriteStripsAnsi(self):
         mockStdout = Mock()
@@ -60,14 +72,15 @@ class AnsiToWin32Test(TestCase):
     def assert_autoresets(self, convert):
         stream = AnsiToWin32(Mock())
         stream.convert = convert
-        stream.reset_all = Mock()
         stream.write_and_convert = Mock()
         stream.autoreset = True
         stream.winterm = Mock()
 
         stream.write('abc')
         
-        self.assertTrue( stream.reset_all.called )
+        self.assertEquals(
+            stream.write_and_convert.call_args,
+            ((Style.RESET_ALL,), {}))
 
     def testWriteAutoresetsIfConvertTrue(self):
         self.assert_autoresets(True)

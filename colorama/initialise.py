@@ -1,6 +1,7 @@
 import atexit
 import sys
 
+from .ansi import Style
 from .ansitowin32 import AnsiToWin32
 
 
@@ -10,8 +11,8 @@ orig_stderr = sys.stderr
 
 @atexit.register
 def reset_all():
-    AnsiToWin32(orig_stdout).reset_all()
-    AnsiToWin32(orig_stderr).reset_all()
+    AnsiToWin32(orig_stdout).write(Style.RESET_ALL)
+    AnsiToWin32(orig_stderr).write(Style.RESET_ALL)
 
 
 def init(autoreset=False, wrap=True):
@@ -28,9 +29,8 @@ def init(autoreset=False, wrap=True):
 
 
 def wrap_stream(stream, autoreset):
-    real_stream = stream
-    if isinstance(stream, AnsiToWin32):
-        real_stream = stream.wrapped
-    return AnsiToWin32(real_stream, autoreset=autoreset)
-
+    if stream is orig_stdout or stream is orig_stderr:
+        stream = AnsiToWin32(stream, autoreset=autoreset)
+    stream.autoreset = autoreset
+    return stream
 

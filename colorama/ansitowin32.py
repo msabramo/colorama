@@ -6,27 +6,53 @@ from .ansi import AnsiFore, AnsiBack, AnsiStyle, Style
 from .winterm import winterm, WinColor, WinStyle
 
 
-class AnsiToWin32(object):
+class StreamWrapper(object):
+    '''
+    Wraps a stream (such as stdout), acting as a transparent proxy for all
+    attribute access apart from method 'write()', which is delegated to our
+    Converter instance.
+    This class contains no other methods or non-double-underscored attributes,
+    to prevent clashes with names of attributes on the wrapped stream object.
+    '''
+    def __init__(self, wrapped, converter):
+        self.__wrapped = wrapped
+        self.__convertor = converter
 
+    def __getattr__(self, name):
+        return getattr(self.__wrapped, name)
+
+    def write(self, text):
+        self.__convertor.write(text)
+
+
+class AnsiToWin32(object):
+    '''
+    Implements a 'write()' method which, on Windows, will strip ANSI character
+    sequences from the text, and if outputting to a tty, will convert them into
+    win32 function calls.
+    '''
     ANSI_RE = re.compile('\033\[((?:\d|;)*)([a-zA-Z])')
 
     def __init__(self, wrapped, autoreset=False):
-        # The stream we are wrapping (normally sys.stdout or sys.stderr)
+        # The wrapped stream (normally sys.stdout or sys.stderr)
         self.wrapped = wrapped
 
         # True if we reset colors to defaults after every .write()
         self.autoreset = autoreset
 
+        # create the proxy wrapping our output stream
+        self.stream = StreamWrapper(wrapped, self)
+
         # True if we strip ANSI sequences from our output
         self.strip = sys.platform.startswith('win')
 
-        # True if we convert stripped ANSI into win32 calls
+        # True if we should convert ANSI sequences nto win32 calls
         self.convert = (
             self.strip and
             hasattr(self.wrapped, 'isatty') and
             self.wrapped.isatty())
 
-        # map ansi codes to win32 functions and parameters
+        # dict of ansi codes to win32 functions and parameters
         self.win32_calls = self.get_win32_calls()
 
         # true if we are wrapping stderr
@@ -61,25 +87,14 @@ class AnsiToWin32(object):
             }
 
 
-    def __getattr__(self, name):
-        return getattr(self.wrapped, name)
-
-
-    def reset_all(self):
-        if self.convert:
-            self.call_win32('m', [0])
-        else:
-            self.wrapped.write(Style.RESET_ALL)
-
-
     def write(self, text):
         if self.strip:
             self.write_and_convert(text)
         else:
             self.wrapped.write(text)
         if self.autoreset:
-            self.reset_all()
-
+            self.write_and_convert(Style.RESET_ALL)
+        
 
     def write_and_convert(self, text):
         '''
