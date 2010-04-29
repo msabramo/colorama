@@ -1,5 +1,5 @@
 
-from win32 import STDOUT_HANDLE, STDERR_HANDLE, SetConsoleTextAttribute
+from . import win32
 
 
 # from wincon.h
@@ -55,9 +55,6 @@ class WinTerm(object):
         self.set_console(on_stderr=on_stderr)
 
     def set_console(self, on_stderr=False):
-        handle = STDERR_HANDLE if on_stderr else STDOUT_HANDLE
-        SetConsoleTextAttribute(handle, self.combined_attrs)
-
-
-winterm = WinTerm()
+        handle = win32.STDERR_HANDLE if on_stderr else win32.STDOUT_HANDLE
+        win32.SetConsoleTextAttribute(handle, self.combined_attrs)
 

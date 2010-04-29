@@ -34,15 +34,18 @@ FEATURES
 --------
 
 Add support for other ANSI sequences: clear screen, move text cursor.
+Next step: Examine what these ansi sequences do on ubuntu, with respect to
+scroll position.
 
-Can we make curses work in windows?
+Hence: Can we make stdlib curses work in windows?
 
 Figure out why colorama.init() doesn't work for ANSI sequences printed
 by the python interactive interpreter. It is using raw_input to print
-the prompt. Does that bypass sys.stdout somehow?
+the prompt. Does raw_input bypass sys.stdout somehow? Can we patch the
+currently running interpretter to not do that?
 
 Use bold to represent bright instead? Use fixed (dim) background brightness.
 
-Consider whether aspects of demo.py shouldn't be provided by colorama. Eg.
+Consider whether aspects of demo.py should be provided by colorama. Eg.
 a collection of all foreground colors and names.
 

@@ -3,7 +3,10 @@ import re
 import sys
 
 from .ansi import AnsiFore, AnsiBack, AnsiStyle, Style
-from .winterm import winterm, WinColor, WinStyle
+from .winterm import WinTerm, WinColor, WinStyle
+
+
+winterm = WinTerm()
 
 
 class StreamWrapper(object):
@@ -11,10 +14,10 @@ class StreamWrapper(object):
     Wraps a stream (such as stdout), acting as a transparent proxy for all
     attribute access apart from method 'write()', which is delegated to our
     Converter instance.
-    This class contains no other methods or non-double-underscored attributes,
-    to prevent clashes with names of attributes on the wrapped stream object.
     '''
     def __init__(self, wrapped, converter):
+        # double-underscore everything to prevent clashes with names of
+        # attributes on the wrapped stream object.
         self.__wrapped = wrapped
         self.__convertor = converter
 
