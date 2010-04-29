@@ -147,7 +147,7 @@ class AnsiToWin32Test(TestCase):
             'abc\033[;;0;;Gdef':    ('G', 'params'),
             'abc\033[1;20;128Hdef': ('H', 'params'),
         }
-        for datum, expected in data.iteritems():
+        for datum, expected in data.items():
             stream.call_win32.reset_mock()
             stream.write_and_convert( datum )
             self.assertEquals( stream.call_win32.call_args[0], expected )
@@ -163,7 +163,7 @@ class AnsiToWin32Test(TestCase):
             ';;003;;456;;':   (3, 456),
             '11;22;33;44;55': (11, 22, 33, 44, 55),
         }
-        for datum, expected in data.iteritems():
+        for datum, expected in data.items():
             self.assertEquals(stream.extract_params(datum), expected)
 
     def testCallWin32UsesLookup(self):

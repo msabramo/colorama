@@ -30,7 +30,7 @@ def init(autoreset=False, wrap=True):
 
 def wrap_stream(stream, autoreset):
     if stream is orig_stdout or stream is orig_stderr:
-        stream = AnsiToWin32(stream, autoreset=autoreset)
+        stream = AnsiToWin32(stream)
     stream.autoreset = autoreset
     return stream
 

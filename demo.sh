@@ -8,10 +8,10 @@
 # Implemented as a bash script which invokes python so that we can test the
 # behaviour on exit, which resets default colors again.
 
-
 # print grid of all colors and brightnesses
 # uses stdout.write to write chars with no newline nor spaces between them
 python 2>err <<EOF2
+from __future__ import print_function
 import sys
 from colorama import init, Fore, Back, Style
 
@@ -67,7 +67,7 @@ NAMES = {
 sys.stdout.write('        ')
 for foreground in FORES:
     sys.stdout.write('%s%-7s' % (foreground, NAMES[foreground]))
-print
+print()
 
 for background in BACKS:
     sys.stdout.write('%s%-7s%s %s' %
@@ -83,65 +83,70 @@ for background in BACKS:
 
         sys.stdout.write(Style.RESET_ALL + ' ' + background)
 
-    print Style.RESET_ALL
-print
+    print(Style.RESET_ALL)
+print()
 EOF2
 
 
 # example of common usage
 python 2>err <<EOF
+from __future__ import print_function
 from colorama import init, Fore, Back, Style
 
 init()
 
-print Fore.GREEN + 'green' + Fore.RED + 'red' + Fore.RESET + 'normal',
-print Back.GREEN + 'green' + Back.RED + 'red' + Back.RESET + 'normal',
-print Style.DIM + 'dim' + \
+print(Fore.GREEN + 'green' + Fore.RED + 'red' + Fore.RESET + 'normal', end=' ')
+print(Back.GREEN + 'green' + Back.RED + 'red' + Back.RESET + 'normal', end=' ')
+print(Style.DIM + 'dim' + \
     Style.NORMAL + 'normal' + \
-    Style.BRIGHT + 'bright',
+    Style.BRIGHT + 'bright')
 EOF
 
 
 # check autoreset works
 # check reset_all is called at exit
 python <<EOF3
+from __future__ import print_function
 from colorama import init, Fore, Back, Style
 init(autoreset=True)
-print Fore.CYAN + Back.MAGENTA + Style.BRIGHT + 'colored', 'autoreset'
+print(Fore.CYAN + Back.MAGENTA + Style.BRIGHT + 'colored', end='')
+print('autoreset')
 init(autoreset=False)
-print Fore.YELLOW + Back.BLUE + Style.BRIGHT + 'colored',
+print(Fore.YELLOW + Back.BLUE + Style.BRIGHT + 'colored', end='')
 EOF3
 echo 'reset at exit'
 
 
 # check ANSI is stripped from redirected stdout
 python >out <<EOF4
+from __future__ import print_function
 from colorama import init, Fore
 init()
-print Fore.RED + 'redirected stdout should contain no ansi'
+print(Fore.RED + 'redirected stdout should contain no ansi')
 EOF4
 cat out
-
 
 # check that ANSI is stripped from redirected stderr, and that stripped ANSI in
 # redirected stderr does not affect stdout
 python 2>err <<EOF5
+from __future__ import print_function
 import sys
 from colorama import init, Fore
 init()
-print Fore.RED + 'Red stdout.',
-print >>sys.stderr, Fore.BLUE + 'redirected stderr should contain no ansi'
-print 'Further stdout should also be red'
+print(Fore.RED + 'Red stdout. ', end='')
+print(Fore.BLUE + 'redirected stderr should contain no ansi', file=sys.stderr)
+print('Further stdout should also be red')
 EOF5
 cat err
 
 
 # use without wrapping stdout
 python <<EOF6
+from __future__ import print_function
 import sys
 from colorama import AnsiToWin32, init, Fore
 init(wrap=False)
-print >>AnsiToWin32(sys.stdout), Fore.CYAN + 'Cyan without wrapping stdout'
+print(Fore.CYAN + 'Cyan without wrapping stdout', file=AnsiToWin32(sys.stdout))
 EOF6
 
 

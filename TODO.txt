@@ -3,8 +3,9 @@ BUGS
 ----
 
 Suspect that it currently does not filter out ansi to redirected streams
-when running on linux. Test this out - does the shell do it for us or
-something? (works ok on windows)
+when running on linux. Test this out in case the shell already does it for us
+or something. If not, then we need to wrap and set strip=true when on non-
+windows whenever a stream is not a tty. (works ok on windows)
 
 Aha! Current passing of 'stderr=True or False' should be replaced by tri-state,
 stderr, stdout or None (some other stream). If None, we do not issue any win32
@@ -22,16 +23,6 @@ fore, back and style should reset to their initial values, not black/white
 REFACTOR
 --------
 
-stream wrapper should be minimal - other functionality extracted to a new
-class. Also, lots of methods seem to be of the form:
-
-    if enabled:
-        do this
-    else
-        do that
-
-which suggests some polymorphism might be in order.
-
 Use distribute instead of distutils
 
 Consider replacing our enum classes with something like Norvig's class Struct,
@@ -41,8 +32,6 @@ or an easy way to generate 'ALL' collections.
 
 FEATURES
 --------
-
-Make it python3 compatible.
 
 Add support for other ANSI sequences: clear screen, move text cursor.
 

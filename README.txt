@@ -167,6 +167,8 @@ identity of stdout.
 Changes
 =======
 
+0.1.7
+    Python 3 compatible.
 0.1.6
     Fix ansi sequences with no params now default to parmlist of [0]
     Fix flaky behaviour of autoreset and reset_all atexit.
