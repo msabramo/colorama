@@ -21,7 +21,7 @@ Linux or Macs can now also work on Windows, simply by calling
 Dependencies
 ============
 
-None, other than Python. Tested on Python 2.6.5. Does not yet work on Python 3.
+None, other than Python. Tested on Python 2.6.5 & 3.1.2.
 
 
 Usage
@@ -169,6 +169,10 @@ Changes
 
 0.1.7
     Python 3 compatible.
+    Fix: Now strips ansi on windows without necessarily converting it to
+    win32 calls (eg. if output is not a tty.)
+    Fix: Flaky interaction of interleaved ansi sent to stdout and stderr.
+    Improved demo.sh (hg checkout only.)
 0.1.6
     Fix ansi sequences with no params now default to parmlist of [0]
     Fix flaky behaviour of autoreset and reset_all atexit.

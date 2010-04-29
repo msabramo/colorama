@@ -35,6 +35,7 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 3.1',
         'Topic :: Terminals',
     ]
     # see classifiers http://pypi.python.org/pypi?%3Aaction=list_classifiers
