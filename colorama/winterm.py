@@ -1,14 +1,6 @@
 
-windll = None
-try:
-    from ctypes import windll
-except ImportError:
-    pass
+from win32 import STDOUT_HANDLE, STDERR_HANDLE, SetConsoleTextAttribute
 
-
-# from winbase.h
-STD_OUTPUT_HANDLE= -11
-STD_ERROR_HANDLE= -12
 
 # from wincon.h
 class WinColor(object):
@@ -32,9 +24,6 @@ class WinTerm(object):
 
     def __init__(self):
         self.default_attrs()
-        if windll:
-            self.out_handle = windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
-            self.err_handle = windll.kernel32.GetStdHandle(STD_ERROR_HANDLE)
 
     @property
     def combined_attrs(self):
@@ -66,9 +55,8 @@ class WinTerm(object):
         self.set_console(on_stderr=on_stderr)
 
     def set_console(self, on_stderr=False):
-        if windll:
-            handle = self.err_handle if on_stderr else self.out_handle
-            windll.kernel32.SetConsoleTextAttribute(handle, self.combined_attrs)
+        handle = STDERR_HANDLE if on_stderr else STDOUT_HANDLE
+        SetConsoleTextAttribute(handle, self.combined_attrs)
 
 
 winterm = WinTerm()

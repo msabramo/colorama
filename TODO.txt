@@ -3,7 +3,7 @@ BUGS
 ----
 
 Suspect that it currently does not filter out ansi to redirected streams
-when running on linux. Test this out in case the shell already does it for us
+when running on linux. Test out whether the shell already does it for us
 or something. If not, then we need to wrap and set strip=true when on non-
 windows whenever a stream is not a tty. (works ok on windows)
 
@@ -41,9 +41,7 @@ Figure out why colorama.init() doesn't work for ANSI sequences printed
 by the python interactive interpreter. It is using raw_input to print
 the prompt. Does that bypass sys.stdout somehow?
 
-Consider whether to scrap support for dim (or bright) in order to use
-constant background brightness settings. Make this optional? Use bold to
-represent bright instead?
+Use bold to represent bright instead? Use fixed (dim) background brightness.
 
 Consider whether aspects of demo.py shouldn't be provided by colorama. Eg.
 a collection of all foreground colors and names.
