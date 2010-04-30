@@ -1,5 +1,3 @@
-# Copyright (c) 2010 Jonathan Hartley <tartley@tartley.com>
-# See LICENSE.txt
 
 from . import win32
 

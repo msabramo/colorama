@@ -1,6 +1,3 @@
-# Copyright (c) 2010 Jonathan Hartley <tartley@tartley.com>
-# See LICENSE.txt
-
 import atexit
 import sys
 
