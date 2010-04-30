@@ -18,6 +18,17 @@ applications or libraries which use ANSI sequences to produce colored output on
 Linux or Macs can now also work on Windows, simply by calling
 ``colorama.init()``.
 
+
+License
+=======
+
+Copyright (c) 2010 Jonathan Hartley <tartley@tartley.com>
+
+Released under the New BSD license (see ``LICENSE.txt``), or alternatively you
+may use this software under any OSI approved open source license such as those
+at http://opensource.org/licenses/alphabetical
+
+
 Dependencies
 ============
 

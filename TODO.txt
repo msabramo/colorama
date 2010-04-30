@@ -12,10 +12,11 @@ stderr, stdout or None (some other stream). If None, we do not issue any win32
 calls. This path would be used for printing to AnsiToWin32(someotherstream).
 
 Does not recognise or strip other formats of ANSI sequences, ie.single char
-sequences, alternative CSI, etc. See the wikipedia article on them, and also
-the ANSI codes used in Peter Norvig's .pythonstartup.py, at the bottom of:
-http://norvig.com/python-iaq.html - they seem to contain a colon (not
-semicolon)
+sequences, alternative CSI, etc. See:
+* the wikipedia article on them
+* Peter Norvig's .pythonstartup.py, at the bottom of:
+http://norvig.com/python-iaq.html - the ANSI used contains a colon???
+* Also my own .bashrc PS1: contains close square brackets???
 
 fore, back and style should reset to their initial values, not black/white
 

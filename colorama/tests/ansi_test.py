@@ -1,3 +1,5 @@
+# Copyright (c) 2010 Jonathan Hartley <tartley@tartley.com>
+# See LICENSE.txt
 
 import sys
 from unittest2 import TestCase, main
