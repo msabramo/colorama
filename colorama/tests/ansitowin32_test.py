@@ -138,6 +138,7 @@ class AnsiToWin32Test(TestCase):
 
     def testWriteAndConvertCallsWin32WithParamsAndCommand(self):
         stream = AnsiToWin32(Mock())
+        stream.convert = True
         stream.call_win32 = Mock()
         stream.extract_params = Mock(return_value='params')
         data = {
