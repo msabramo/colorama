@@ -57,7 +57,6 @@ class InitTest(TestCase):
             init(wrap=False)
             self.assertNotWrapped()
 
-    @patch('colorama.ansitowin32.winterm', None)
     def testInitWrapOffWillUnwrapIfRequired(self):
         with platform('windows'):
             init()
