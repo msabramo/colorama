@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from os.path import dirname, join
 from setuptools import setup, find_packages
 from colorama import __version__
