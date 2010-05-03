@@ -91,8 +91,8 @@ Init Keyword Args
 
 init(autoreset=False):
     If you find yourself repeatedly sending reset sequences to turn off color
-    changes at the end of every print, then init(autoreset=True) will automate
-    that::
+    changes at the end of every print, then ``init(autoreset=True)`` will
+    automate that::
 
         from colorama import init
         init(autoreset=True)
