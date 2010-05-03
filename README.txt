@@ -41,8 +41,8 @@ equivalent Win32 calls.
 
 Calling ``init()`` has no effect on other platforms (unless you request other
 optional functionality, see keyword args below.) The intention is that all
-applications can call init() unconditionally on all platforms, after which ANSI
-output should just work.
+applications can call ``init()`` unconditionally on all platforms, after which
+ANSI output should just work.
 
 Colored Output
 --------------
@@ -87,7 +87,7 @@ perform this reset automatically on program exit.
 Init Keyword Args
 -----------------
 
-init() accepts some kwargs to override default behaviour.
+``init()`` accepts some kwargs to override default behaviour.
 
 init(autoreset=False):
     If you find yourself repeatedly sending reset sequences to turn off color
@@ -110,14 +110,14 @@ init(convert=None):
 
 init(wrap=True):
     On Windows, colorama works by replacing sys.stdout and sys.stderr with
-    proxy objects, which override the .write() method to do their work. If this
-    wrapping of sys.stdout and sys.stderr causes you problems, then this can be
-    disabled by passing init(wrap=False). The default behaviour is to wrap
-    if autoreset or strip or convert are True.
+    proxy objects, which override the ``.write()`` method to do their work. If
+    this wrapping of ``sys.stdout`` and ``sys.stderr`` causes you problems,
+    then this can be disabled by passing ``init(wrap=False)``. The default
+    behaviour is to wrap if autoreset or strip or convert are True.
 
     When wrapping is disabled, colored printing on non-Windows platforms will
     continue to work as normal. To do cross-platform colored output, you can
-    use Colorama's AnsiToWin32 proxy directly::
+    use Colorama's ``AnsiToWin32`` proxy directly::
 
         from colorama import init, AnsiToWin32
         init(wrap=False)
@@ -154,8 +154,8 @@ applications. See screenshots at http://tartley.com/?p=1062. Perhaps I should
 be using Windows 'bold' text to simulate 'bright' intead.
 
 On Linux terminals, the 'RESET' background and foreground colors are
-potentially distinct from all other colors. On Windows, Back.RESET and
-Fore.RESET produce an RGB which is indistinguishable from one of the other
+potentially distinct from all other colors. On Windows, ``Back.RESET`` and
+``Fore.RESET`` produce an RGB which is indistinguishable from one of the other
 color entries.
 
 Only the colors and dim/bright subset of ANSI 'm' commands are recognised.
