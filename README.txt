@@ -116,9 +116,8 @@ init(wrap=True):
     if autoreset or strip or convert are True.
 
     When wrapping is disabled, colored printing on non-Windows platforms will
-    continue to work as normal. To do colored printing on Windows (or cross-
-    platform), you can use Colorama's AnsiToWin32 proxy directly. Any attribute
-    access on this object will be forwarded to the stream it wraps::
+    continue to work as normal. To do cross-platform colored output, you can
+    use Colorama's AnsiToWin32 proxy directly:
 
         from colorama import init, AnsiToWin32
         init(wrap=False)
@@ -129,7 +128,8 @@ init(wrap=True):
 Status & Known Problems
 =======================
 
-Just became feature complete. Consider it alpha.
+Feature complete, but still finding bugs and occasionally making small changes
+to the API.
 
 Only tested on WinXP (CMD, Console2) and Ubuntu (gnome-terminal, xterm). Much
 obliged if anyone can let me know how it fares elsewhere, in particular on
