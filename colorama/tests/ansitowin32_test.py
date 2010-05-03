@@ -1,12 +1,12 @@
 
 from unittest2 import TestCase, main
-
 from mock import Mock, patch
 
 from .utils import platform
 
 from ..ansi import Style
 from ..ansitowin32 import AnsiToWin32, StreamWrapper
+
 
 
 class StreamWrapperTest(TestCase):
@@ -69,35 +69,22 @@ class AnsiToWin32Test(TestCase):
         self.assertFalse(stream.write_and_convert.called)
         self.assertEquals(stream.wrapped.write.call_args, (('abc',), {}))
 
-    def assert_autoresets(self, convert):
+    def assert_autoresets(self, convert, autoreset=True):
         stream = AnsiToWin32(Mock())
         stream.convert = convert
-        stream.write_and_convert = Mock()
-        stream.autoreset = True
+        stream.reset_all = Mock()
+        stream.autoreset = autoreset
         stream.winterm = Mock()
 
         stream.write('abc')
         
-        self.assertEquals(
-            stream.write_and_convert.call_args,
-            ((Style.RESET_ALL,), {}))
+        self.assertEquals(stream.reset_all.called, autoreset)
 
-    def testWriteAutoresetsIfConvertTrue(self):
-        self.assert_autoresets(True)
-
-    def testWriteAutoresetsIfDisabled(self):
-        self.assert_autoresets(False)
-
-    def testWriteDoesntAutoresetIfOff(self):
-        stream = AnsiToWin32(Mock())
-        stream.convert = True
-        stream.write_and_convert = Mock()
-        stream.autoreset = False
-        stream.winterm = Mock()
-
-        stream.write('abc')
-        
-        self.assertEqual(stream.winterm.method_calls, [])
+    def testWriteAutoresets(self):
+        self.assert_autoresets(convert=True)
+        self.assert_autoresets(convert=False)
+        self.assert_autoresets(convert=True, autoreset=False)
+        self.assert_autoresets(convert=False, autoreset=False)
 
     def testWriteAndConvertWritesPlainText(self):
         stream = AnsiToWin32(Mock())

@@ -117,27 +117,16 @@ EOF3
 echo 'reset at exit'
 
 
-# check ANSI is stripped from redirected stdout
-python >out <<EOF4
-from __future__ import print_function
-from colorama import init, Fore
-init()
-print(Fore.RED + 'redirected stdout should contain no ansi')
-EOF4
-cat out
-
-# check that ANSI is stripped from redirected stderr, and that stripped ANSI in
-# redirected stderr does not affect stdout
+# check that stripped ANSI in redirected stderr does not affect stdout
 python 2>err <<EOF5
 from __future__ import print_function
 import sys
 from colorama import init, Fore
 init()
 print(Fore.RED + 'Red stdout. ', end='')
-print(Fore.BLUE + 'redirected stderr should contain no ansi', file=sys.stderr)
+print(Fore.BLUE + 'blue redirected stderr', file=sys.stderr)
 print('Further stdout should also be red')
 EOF5
-cat err
 
 
 # use without wrapping stdout

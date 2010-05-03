@@ -35,13 +35,14 @@ Applications should initialise Colorama using::
     from colorama import init
     init()
 
-If you are on Windows, the call to ''init()'' will start filtering ANSI escape
+If you are on Windows, the call to ``init()`` will start filtering ANSI escape
 sequences out of any text sent to stdout or stderr, and will replace them with
 equivalent Win32 calls.
 
-Calling ''init()'' has no effect on other platforms (unless you use
-'autoreset', see below) The intention is that applications should call init()
-unconditionally to make subsequent ANSI output just work on all platforms.
+Calling ``init()`` has no effect on other platforms (unless you request other
+optional functionality, see keyword args below.) The intention is that all
+applications can call init() unconditionally on all platforms, after which ANSI
+output should just work.
 
 Colored Output
 --------------
@@ -82,36 +83,47 @@ Available formatting constants are::
 Style.RESET_ALL resets foreground, background and brightness. Colorama will
 perform this reset automatically on program exit.
 
-Autoreset
----------
 
-If you find yourself repeatedly sending reset sequences to turn off color
-changes at the end of every print, then init(autoreset=True) will automate
-that::
+Init Keyword Args
+-----------------
 
-    from colorama import init
-    init(autoreset=True)
-    print Fore.RED + 'some red text'
-    print 'automatically back to default color again'
+init() accepts some kwargs to override default behaviour.
 
-Without wrapping stdout
------------------------
+init(autoreset=False):
+    If you find yourself repeatedly sending reset sequences to turn off color
+    changes at the end of every print, then init(autoreset=True) will automate
+    that::
 
-Colorama works by wrapping stdout and stderr with proxy objects, that override
-write() to do their work. Using autoreset (above) will do this wrapping on all
-platforms, not just Windows.
+        from colorama import init
+        init(autoreset=True)
+        print Fore.RED + 'some red text'
+        print 'automatically back to default color again'
 
-If these proxy objects wrapping stdout and stderr cause you problems, then this
-can be disabled using init(wrap=False). You can then access Colorama's
-AnsiToWin32 proxy directly. Any attribute access on this object will be
-forwarded to the stream it wraps, apart from .write(), which on Windows is
-overridden to first perform the ANSI to Win32 conversion on text::
+init(strip=None):
+    Pass True or False to override whether ansi codes should be stripped from
+    the output. The default behaviour is to strip if on Windows.
 
-    from colorama import init, AnsiToWin32
-    init(wrap=False)
+init(convert=None):
+    Pass True or False to override whether to convert ansi codes in the output
+    into win32 calls. The default behaviour is to convert if on Windows and
+    output is to a tty (terminal).
 
-    stream = AnsiToWin32(sys.stderr)
-    print >>stream, Fore.BLUE + 'blue text on stderr'    
+init(wrap=True):
+    On Windows, colorama works by replacing sys.stdout and sys.stderr with
+    proxy objects, which override the .write() method to do their work. If this
+    wrapping of sys.stdout and sys.stderr causes you problems, then this can be
+    disabled by passing init(wrap=False). The default behaviour is to wrap
+    if autoreset or strip or convert are True.
+
+    When wrapping is disabled, colored printing on non-Windows platforms will
+    continue to work as normal. To do colored printing on Windows (or cross-
+    platform), you can use Colorama's AnsiToWin32 proxy directly. Any attribute
+    access on this object will be forwarded to the stream it wraps::
+
+        from colorama import init, AnsiToWin32
+        init(wrap=False)
+        stream = AnsiToWin32(sys.stderr).stream
+        print >>stream, Fore.BLUE + 'blue text on stderr'    
 
 
 Status & Known Problems
@@ -138,7 +150,8 @@ the background is constant. On Windows, both foreground and background
 have independent normal / bright settings. Colorama maps 'bright' ANSI codes to
 use a bright background color on Windows, to emulate the missing third level of
 brightness. This might cause unexpected uglyness for particular existing
-applications. See screenshots at http://tartley.com/?p=1062.
+applications. See screenshots at http://tartley.com/?p=1062. Perhaps I should
+be using Windows 'bold' text to simulate 'bright' intead.
 
 On Linux terminals, the 'RESET' background and foreground colors are
 potentially distinct from all other colors. On Windows, Back.RESET and
@@ -150,7 +163,6 @@ There are many other ANSI sequences (eg. moving cursor position.) These are
 currently silently stripped from the output on Windows.
 
 
-
 Development
 ===========
 
@@ -159,14 +171,17 @@ using::
 
     unit2 discover -p '*_test.py'
 
-Colorama does not play nice with nosetests. Nose captures stdout by wrapping
-it in a StringIO, which confuses colorama's unit tests' expectations about the
-identity of stdout.
+If using 'nosetests' for test discovery, be aware that it applies a proxy of
+its own to stdout, which confuses the unit tests. Use 'nosetests -s' to fix
+this.
 
 
 Changes
 =======
 
+0.1.8
+    Fix ghastly errors all over the place on Ubuntu.
+    Add init kwargs 'convert' and 'strip', which supercede the old 'wrap'.
 0.1.7
     Python 3 compatible.
     Fix: Now strips ansi on windows without necessarily converting it to

@@ -9,6 +9,10 @@ from .winterm import WinTerm, WinColor, WinStyle
 winterm = WinTerm()
 
 
+def is_a_tty(stream):
+    return hasattr(stream, 'isatty') and stream.isatty()
+
+
 class StreamWrapper(object):
     '''
     Wraps a stream (such as stdout), acting as a transparent proxy for all
@@ -36,30 +40,44 @@ class AnsiToWin32(object):
     '''
     ANSI_RE = re.compile('\033\[((?:\d|;)*)([a-zA-Z])')
 
-    def __init__(self, wrapped, autoreset=False):
+    def __init__(self, wrapped, convert=None, strip=None, autoreset=False):
         # The wrapped stream (normally sys.stdout or sys.stderr)
         self.wrapped = wrapped
 
-        # True if we reset colors to defaults after every .write()
+        # should we reset colors to defaults after every .write()
         self.autoreset = autoreset
 
         # create the proxy wrapping our output stream
         self.stream = StreamWrapper(wrapped, self)
 
-        # True if we strip ANSI sequences from our output
-        self.strip = sys.platform.startswith('win')
+        on_windows = sys.platform.startswith('win')
 
-        # True if we should convert ANSI sequences nto win32 calls
-        self.convert = (
-            self.strip and
-            hasattr(self.wrapped, 'isatty') and
-            self.wrapped.isatty())
+        # should we strip ANSI sequences from our output?
+        if strip is None:
+            strip = on_windows
+        self.strip = strip
+
+        # should we should convert ANSI sequences into win32 calls?
+        if convert is None:
+            convert = on_windows and is_a_tty(wrapped)
+        self.convert = convert
 
         # dict of ansi codes to win32 functions and parameters
         self.win32_calls = self.get_win32_calls()
 
-        # true if we are wrapping stderr
+        # are we wrapping stderr?
         self.on_stderr = self.wrapped is sys.stderr
+
+
+    def should_wrap(self):
+        '''
+        True if this class is actually needed. If false, then the output
+        stream will not be affected, nor will win32 calls be issued, so
+        wrapping stdout is not actually required. This will generally be
+        False on non-Windows platforms, unless optional functionality like
+        autoreset has been requested using init(autoreset=True)
+        '''
+        return self.convert or self.strip or self.autoreset
 
 
     def get_win32_calls(self):
@@ -91,13 +109,21 @@ class AnsiToWin32(object):
 
 
     def write(self, text):
-        if self.strip:
+        if self.strip or self.convert:
             self.write_and_convert(text)
         else:
             self.wrapped.write(text)
+            self.wrapped.flush()
         if self.autoreset:
-            self.write_and_convert(Style.RESET_ALL)
+            self.reset_all()
         
+
+    def reset_all(self):
+        if self.convert:
+            self.call_win32('m', (0,))
+        else:
+            self.wrapped.write(Style.RESET_ALL)
+
 
     def write_and_convert(self, text):
         '''

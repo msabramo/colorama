@@ -1,7 +1,6 @@
 import atexit
 import sys
 
-from .ansi import Style
 from .ansitowin32 import AnsiToWin32
 
 
@@ -11,22 +10,23 @@ orig_stderr = sys.stderr
 
 @atexit.register
 def reset_all():
-    AnsiToWin32(orig_stdout).write(Style.RESET_ALL)
-    AnsiToWin32(orig_stderr).write(Style.RESET_ALL)
+    AnsiToWin32(orig_stdout).reset_all()
 
 
-def init(autoreset=False, wrap=None):
+def init(autoreset=False, convert=None, strip=None, wrap=True):
 
-    if autoreset==True and wrap==False:
-        raise ValueError('autoreset=True conflicts with wrap=False')
+    if wrap==False and (autoreset==True or convert==True or strip==True):
+        raise ValueError('wrap=False conflicts with any other arg=True')
 
-    if wrap is None:
-        wrap = sys.platform.startswith('win') or autoreset
+    sys.stdout = wrap_stream(orig_stdout, convert, strip, autoreset, wrap)
+    sys.stderr = wrap_stream(orig_stderr, convert, strip, autoreset, wrap)
 
+
+def wrap_stream(stream, convert, strip, autoreset, wrap):
     if wrap:
-        sys.stdout = AnsiToWin32(orig_stdout, autoreset=autoreset)
-        sys.stderr = AnsiToWin32(orig_stderr, autoreset=autoreset)
-    else:
-        sys.stdout = orig_stdout
-        sys.stderr = orig_stderr
+        wrapper = AnsiToWin32(stream,
+            convert=convert, strip=strip, autoreset=autoreset)
+        if wrapper.should_wrap():
+            stream = wrapper.stream
+    return stream
 

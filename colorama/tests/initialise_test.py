@@ -4,13 +4,14 @@ from unittest2 import TestCase, main
 
 from mock import patch
 
-from .utils import platform
+from .utils import platform, redirected_output
 
-from ..initialise import init, AnsiToWin32
+from ..initialise import init
+from ..ansitowin32 import StreamWrapper
 
 
-stdout_orig = sys.stdout
-stderr_orig = sys.stderr
+orig_stdout = sys.stdout
+orig_stderr = sys.stderr
 
 
 class InitTest(TestCase):
@@ -20,24 +21,23 @@ class InitTest(TestCase):
         self.assertNotWrapped()
 
     def tearDown(self):
-        sys.stdout = stdout_orig
-        sys.stderr = stderr_orig
+        sys.stdout = orig_stdout
+        sys.stderr = orig_stderr
 
     def assertWrapped(self):
-        # note that nosetests also wraps stdout (a file) with some proxy, so
-        # assertions on identity are tricky. Just assert by type instead.
-        self.assertEqual(type(sys.stdout), AnsiToWin32)
-        self.assertNotEqual(type(sys.stdout.wrapped), AnsiToWin32)
-
-        self.assertEqual(type(sys.stderr), AnsiToWin32)
-        self.assertNotEqual(type(sys.stderr.wrapped), AnsiToWin32)
+        self.assertIsNot(sys.stdout, orig_stdout, 'stdout should be wrapped')
+        self.assertIsNot(sys.stderr, orig_stderr, 'stderr should be wrapped')
+        self.assertTrue(isinstance(sys.stdout, StreamWrapper),
+            'bad stdout wrapper')
+        self.assertTrue(isinstance(sys.stderr, StreamWrapper),
+            'bad stderr wrapper')
 
     def assertNotWrapped(self):
-        self.assertNotEqual(type(sys.stdout), AnsiToWin32)
-        self.assertNotEqual(type(sys.stderr), AnsiToWin32)
+        self.assertIs(sys.stdout, orig_stdout, 'stdout should not be wrapped')
+        self.assertIs(sys.stderr, orig_stderr, 'stderr should not be wrapped')
 
-    @patch('colorama.ansitowin32.winterm', None)
-    def testInitWrapsOnWindows(self):
+    @patch('colorama.initialise.reset_all')
+    def testInitWrapsOnWindows(self, _):
         with platform('windows'):
             init()
             self.assertWrapped()
@@ -73,22 +73,31 @@ class InitTest(TestCase):
             init()
             self.assertWrapped()
 
-    def testAutoResetPassedOn(self):
-        init(autoreset=True)
-        self.assertTrue( sys.stdout.autoreset )
-        self.assertTrue( sys.stderr.autoreset )
+    @patch('colorama.win32.SetConsoleTextAttribute')
+    @patch('colorama.initialise.AnsiToWin32')
+    def testAutoResetPassedOn(self, mockATW32, _):
+        with platform('windows'):
+            init(autoreset=True)
+            self.assertEquals(len(mockATW32.call_args_list), 2)
+            self.assertEquals(mockATW32.call_args_list[1][1]['autoreset'], True)
+            self.assertEquals(mockATW32.call_args_list[0][1]['autoreset'], True)
 
-    def testAutoResetChangeable(self):
+    @patch('colorama.initialise.AnsiToWin32')
+    def testAutoResetChangeable(self, mockATW32):
         with platform('windows'):
             init()
+
             init(autoreset=True)
-            self.assertWrapped()
-            self.assertTrue( sys.stdout.autoreset )
-            self.assertTrue( sys.stderr.autoreset )
+            self.assertEquals(len(mockATW32.call_args_list), 4)
+            self.assertEquals(mockATW32.call_args_list[2][1]['autoreset'], True)
+            self.assertEquals(mockATW32.call_args_list[3][1]['autoreset'], True)
+
             init()
-            self.assertWrapped()
-            self.assertFalse( sys.stdout.autoreset )
-            self.assertFalse( sys.stderr.autoreset )
+            self.assertEquals(len(mockATW32.call_args_list), 6)
+            self.assertEquals(
+                mockATW32.call_args_list[4][1]['autoreset'], False)
+            self.assertEquals(
+                mockATW32.call_args_list[5][1]['autoreset'], False)
 
 
 if __name__ == '__main__':

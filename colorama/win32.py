@@ -1,18 +1,22 @@
 
+# from winbase.h
+STDOUT = -11
+STDERR = -12
+
 try:
     from ctypes import windll
 except ImportError:
     windll = None
-    STDOUT_HANDLE = None
-    STDERR_HANDLE = None
+    SetConsoleTextAttribute = lambda *_: None
 else:
     from ctypes import (
         byref, Structure, c_char, c_short, c_uint32, c_ushort
     )
 
-    # constants from winbase.h
-    STDOUT_HANDLE = windll.kernel32.GetStdHandle(-11)
-    STDERR_HANDLE = windll.kernel32.GetStdHandle(-12)
+    handles = {
+        STDOUT: windll.kernel32.GetStdHandle(STDOUT),
+        STDERR: windll.kernel32.GetStdHandle(STDERR),
+    }
 
     SHORT = c_short
     WORD = c_ushort
@@ -45,23 +49,27 @@ else:
             ("dwMaximumWindowSize", COORD),
         ]
 
-    def GetConsoleScreenBufferInfo(handle):
+    def GetConsoleScreenBufferInfo(stream_id):
+        handle = handles[stream_id]
         csbi = CONSOLE_SCREEN_BUFFER_INFO()
         success = windll.kernel32.GetConsoleScreenBufferInfo(
             handle, byref(csbi))
         assert success
         return csbi
 
-    def SetConsoleTextAttribute(handle, attrs):
+    def SetConsoleTextAttribute(stream_id, attrs):
+        handle = handles[stream_id]
         success = windll.kernel32.SetConsoleTextAttribute(handle, attrs)
         assert success
 
-    def SetConsoleCursorPosition(handle, position):
+    def SetConsoleCursorPosition(stream_id, position):
+        handle = handles[stream_id]
         position = COORD(*position)
         success = windll.kernel32.SetConsoleCursorPosition(handle, position)
         assert success
 
-    def FillConsoleOutputCharacter(handle, char, length, start):
+    def FillConsoleOutputCharacter(stream_id, char, length, start):
+        handle = handles[stream_id]
         char = TCHAR(char)
         length = DWORD(length)
         start = COORD(*start)
@@ -75,8 +83,8 @@ else:
 
 
 if __name__=='__main__':
-    # SetConsoleTextAttribute(STDOUT_HANDLE, 7)
-    #FillConsoleOutputCharacter(STDOUT_HANDLE, '.', 81, (1, 2))
-    # SetConsoleCursorPosition(STDOUT_HANDLE, (1, 2))
-    print GetConsoleScreenBufferInfo(STDOUT_HANDLE)
+    # SetConsoleTextAttribute(STDOUT, 7)
+    #FillConsoleOutputCharacter(STDOUT, '.', 81, (1, 2))
+    # SetConsoleCursorPosition(STDOUT, (1, 2))
+    print GetConsoleScreenBufferInfo(STDOUT)
 
