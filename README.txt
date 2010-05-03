@@ -117,7 +117,7 @@ init(wrap=True):
 
     When wrapping is disabled, colored printing on non-Windows platforms will
     continue to work as normal. To do cross-platform colored output, you can
-    use Colorama's AnsiToWin32 proxy directly:
+    use Colorama's AnsiToWin32 proxy directly::
 
         from colorama import init, AnsiToWin32
         init(wrap=False)
