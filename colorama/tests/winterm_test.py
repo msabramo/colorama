@@ -88,7 +88,7 @@ class WinTermTest(TestCase):
 
         self.assertEquals(
             mockWin32.SetConsoleTextAttribute.call_args,
-            ((mockWin32.STDOUT_HANDLE, term.combined_attrs), {})
+            ((mockWin32.STDOUT, term.combined_attrs), {})
         )
 
     @patch('colorama.winterm.win32')
@@ -100,7 +100,7 @@ class WinTermTest(TestCase):
         
         self.assertEquals(
             mockWin32.SetConsoleTextAttribute.call_args,
-            ((mockWin32.STDERR_HANDLE, term.combined_attrs), {})
+            ((mockWin32.STDERR, term.combined_attrs), {})
         )
         
 
