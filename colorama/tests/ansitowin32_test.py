@@ -57,17 +57,20 @@ class AnsiToWin32Test(TestCase):
         self.assertFalse(stream.wrapped.write.called)
         self.assertEquals(stream.write_and_convert.call_args, (('abc',), {}))
 
+
     def testWriteDoesNotStripAnsi(self):
         mockStdout = Mock()
         stream = AnsiToWin32(mockStdout)
         stream.wrapped = Mock()
         stream.write_and_convert = Mock()
         stream.strip = False
+        stream.convert = False
 
         stream.write('abc')
         
         self.assertFalse(stream.write_and_convert.called)
         self.assertEquals(stream.wrapped.write.call_args, (('abc',), {}))
+
 
     def assert_autoresets(self, convert, autoreset=True):
         stream = AnsiToWin32(Mock())
