@@ -169,5 +169,6 @@ class AnsiToWin32(object):
                     func_args = self.win32_calls[param]
                     func = func_args[0]
                     args = func_args[1:]
-                    func(*args, on_stderr=self.on_stderr)
+                    kwargs = dict(on_stderr=self.on_stderr)
+                    func(*args, **kwargs)
 
