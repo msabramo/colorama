@@ -130,8 +130,9 @@ init(wrap=True):
 Status & Known Problems
 =======================
 
-Feature complete, but still finding bugs and occasionally making small changes
-to the API.
+Feature complete as far as colored text goes, but still finding bugs and
+occasionally making small changes to the API. I'd like to also handle ANSI
+codes which position the text cursor and clear the terminal.
 
 Only tested on WinXP (CMD, Console2) and Ubuntu (gnome-terminal, xterm). Much
 obliged if anyone can let me know how it fares elsewhere, in particular on

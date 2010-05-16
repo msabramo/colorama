@@ -2,7 +2,9 @@
 
 from os.path import dirname, join
 from distutils.core import setup
+
 from colorama import __version__
+
 
 name = 'colorama'
 
@@ -22,14 +24,6 @@ setup(
     url='http://code.google.com/p/colorama/',
     license='BSD',
     packages=[name],
-    include_package_data=True,
-    zip_safe=True,
-    install_requires=[
-      # -*- Extra requirements: -*-
-    ],
-    entry_points="""
-# -*- Entry points: -*-
-    """,
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Environment :: Console',
