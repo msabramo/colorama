@@ -1,52 +1,27 @@
 
-BUGS
-----
+Add support for other ANSI sequences:
+* reset to start of current line? (enough for fish to work on windows)
+* clear screen
+* move text cursor
+Next step: Examine precisely what these ansi sequences do on ubuntu.
 
-Suspect that it currently does not filter out ansi to redirected streams
-when running on linux. Test out whether the shell already does it for us
-or something. If not, then we need to wrap and set strip=true when on non-
-windows whenever a stream is not a tty. (works ok on windows)
+User Roger Binns says: Please please please get rid of the dependency on setuptools in setup.py. This makes it so much harder to install having to go out and get yet another package just to install this one.
 
-Aha! Current passing of 'stderr=True or False' should be replaced by tri-state,
-stderr, stdout or None (some other stream). If None, we do not issue any win32
-calls. This path would be used for printing to AnsiToWin32(someotherstream).
-
-Does not recognise or strip other formats of ANSI sequences, ie.single char
-sequences, alternative CSI, etc. See:
-* the wikipedia article on them
-* Peter Norvig's .pythonstartup.py, at the bottom of:
-http://norvig.com/python-iaq.html - the ANSI used contains a colon???
-* Also my own .bashrc PS1: contains close square brackets???
+Bug: Does not recognise or strip other formats of ANSI sequences, ie.single
+char sequences, alternative CSI, etc. See:
+    * the wikipedia article on them
+    * Peter Norvig's .pythonstartup.py, at the bottom of:
+    http://norvig.com/python-iaq.html - the ANSI used contains a colon???
+    * Also my own .bashrc PS1: contains close square brackets???
 
 fore, back and style should reset to their initial values, not black/white
 
-
-REFACTOR
---------
-
-Use distribute instead of distutils
-
-Consider replacing our enum classes with something like Norvig's class Struct,
-from: http://norvig.com/python-iaq.html, if it can either give us color names
-or an easy way to generate 'ALL' collections.
-
-
-FEATURES
---------
-
-Add support for other ANSI sequences: clear screen, move text cursor.
-Next step: Examine what these ansi sequences do on ubuntu, with respect to
-scroll position.
-
-Hence: Can we make stdlib curses work in windows?
+Use bold to represent bright instead, so we can use fixed (dim) background
+brightness.
 
 Figure out why colorama.init() doesn't work for ANSI sequences printed
-by the python interactive interpreter. It is using raw_input to print
-the prompt. Does raw_input bypass sys.stdout somehow? Can we patch the
-currently running interpretter to not do that?
+by the python interactive interpreter (eg as part of sys.prompt).
+It is using raw_input to print the prompt. Does raw_input bypass writing to
+sys.stdout somehow? Can we fix this? Colored prompts are nice.
 
-Use bold to represent bright instead? Use fixed (dim) background brightness.
-
-Consider whether aspects of demo.py should be provided by colorama. Eg.
-a collection of all foreground colors and names.
 
