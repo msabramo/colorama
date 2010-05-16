@@ -21,7 +21,7 @@ Linux or Macs can now also work on Windows, simply by calling
 Dependencies
 ============
 
-None, other than Python. Tested on Python 2.6.5 & 3.1.2.
+None, other than Python. Tested on Python 2.5.5, 2.6.5 & 3.1.2.
 
 
 Usage
