@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from os.path import dirname, join
-from setuptools import setup, find_packages
+from distutils.core import setup
 from colorama import __version__
 
 name = 'colorama'
@@ -21,7 +21,7 @@ setup(
     author_email='tartley@tartley.com',
     url='http://code.google.com/p/colorama/',
     license='BSD',
-    packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+    packages=[name],
     include_package_data=True,
     zip_safe=True,
     install_requires=[
