@@ -1,27 +1,2 @@
 
-Add support for other ANSI sequences:
-* reset to start of current line? (enough for fish to work on windows)
-* clear screen
-* move text cursor
-Next step: Examine precisely what these ansi sequences do on ubuntu.
-
-User Roger Binns says: Please please please get rid of the dependency on setuptools in setup.py. This makes it so much harder to install having to go out and get yet another package just to install this one.
-
-Bug: Does not recognise or strip other formats of ANSI sequences, ie.single
-char sequences, alternative CSI, etc. See:
-    * the wikipedia article on them
-    * Peter Norvig's .pythonstartup.py, at the bottom of:
-    http://norvig.com/python-iaq.html - the ANSI used contains a colon???
-    * Also my own .bashrc PS1: contains close square brackets???
-
-fore, back and style should reset to their initial values, not black/white
-
-Use bold to represent bright instead, so we can use fixed (dim) background
-brightness.
-
-Figure out why colorama.init() doesn't work for ANSI sequences printed
-by the python interactive interpreter (eg as part of sys.prompt).
-It is using raw_input to print the prompt. Does raw_input bypass writing to
-sys.stdout somehow? Can we fix this? Colored prompts are nice.
-
 

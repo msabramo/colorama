@@ -1,4 +1,5 @@
-http://code.google.com/p/colorama/
+http://pypi.python.org/pypi/colorama (docs and download)
+http://code.google.com/p/colorama/ (development)
 
 Description
 ===========
@@ -40,9 +41,10 @@ sequences out of any text sent to stdout or stderr, and will replace them with
 equivalent Win32 calls.
 
 Calling ``init()`` has no effect on other platforms (unless you request other
-optional functionality, see keyword args below.) The intention is that all
+optional functionality, see keyword args below.) The intention is that
 applications can call ``init()`` unconditionally on all platforms, after which
 ANSI output should just work.
+
 
 Colored Output
 --------------
@@ -100,24 +102,24 @@ init(autoreset=False):
         print 'automatically back to default color again'
 
 init(strip=None):
-    Pass True or False to override whether ansi codes should be stripped from
-    the output. The default behaviour is to strip if on Windows.
+    Pass ``True`` or ``False`` to override whether ansi codes should be
+    stripped from the output. The default behaviour is to strip if on Windows.
 
 init(convert=None):
-    Pass True or False to override whether to convert ansi codes in the output
-    into win32 calls. The default behaviour is to convert if on Windows and
-    output is to a tty (terminal).
+    Pass ``True`` or ``False`` to override whether to convert ansi codes in the
+    output into win32 calls. The default behaviour is to convert if on Windows
+    and output is to a tty (terminal).
 
 init(wrap=True):
-    On Windows, colorama works by replacing sys.stdout and sys.stderr with
-    proxy objects, which override the ``.write()`` method to do their work. If
-    this wrapping of ``sys.stdout`` and ``sys.stderr`` causes you problems,
-    then this can be disabled by passing ``init(wrap=False)``. The default
-    behaviour is to wrap if autoreset or strip or convert are True.
+    On Windows, colorama works by replacing ``sys.stdout`` and ``sys.stderr``
+    with proxy objects, which override the .write() method to do their work. If
+    this wrapping causes you problems, then this can be disabled by passing
+    ``init(wrap=False)``. The default behaviour is to wrap if autoreset or
+    strip or convert are True.
 
     When wrapping is disabled, colored printing on non-Windows platforms will
     continue to work as normal. To do cross-platform colored output, you can
-    use Colorama's ``AnsiToWin32`` proxy directly::
+    use Colorama's ``AnsiToWin32`` proxy directly:
 
         from colorama import init, AnsiToWin32
         init(wrap=False)
@@ -135,32 +137,8 @@ Only tested on WinXP (CMD, Console2) and Ubuntu (gnome-terminal, xterm). Much
 obliged if anyone can let me know how it fares elsewhere, in particular on
 Macs.
 
-See outstanding bugs, refactoring and wishlist in TODO.txt.
-(http://code.google.com/p/colorama/source/browse/TODO.txt)
-
-Some differences between Windows and other terminals exist, which Colorama
-currently makes no attempt to meddle with:
-
-On Linux terminals, scrolling fills the whole new line with the current
-background color. On Windows, the new line is filled with the default
-background color.
-
-On Linux, the foreground color has dim / normal / bright settings, but
-the background is constant. On Windows, both foreground and background
-have independent normal / bright settings. Colorama maps 'bright' ANSI codes to
-use a bright background color on Windows, to emulate the missing third level of
-brightness. This might cause unexpected uglyness for particular existing
-applications. See screenshots at http://tartley.com/?p=1062. Perhaps I should
-be using Windows 'bold' text to simulate 'bright' intead.
-
-On Linux terminals, the 'RESET' background and foreground colors are
-potentially distinct from all other colors. On Windows, ``Back.RESET`` and
-``Fore.RESET`` produce an RGB which is indistinguishable from one of the other
-color entries.
-
-Only the colors and dim/bright subset of ANSI 'm' commands are recognised.
-There are many other ANSI sequences (eg. moving cursor position.) These are
-currently silently stripped from the output on Windows.
+See outstanding issues and wishlist at:
+http://code.google.com/p/colorama/issues/list
 
 
 Development
@@ -179,6 +157,9 @@ this.
 Changes
 =======
 
+0.1.9
+    Fix incompatibility with Python 2.5 and earlier
+    Remove setup.py dependency on setuptools, now uses stdlib distutils
 0.1.8
     Fix ghastly errors all over the place on Ubuntu.
     Add init kwargs 'convert' and 'strip', which supercede the old 'wrap'.
