@@ -215,6 +215,8 @@ stdout, which confuses the unit tests.
 Changes
 =======
 
+0.1.12
+    Fix fatal import errors on Ubuntu. oops.
 0.1.11
     Fix hard-coded reset to white-on-black colors. Fore.RESET, Back.RESET
     and Style.RESET_ALL now revert to the colors as they were when init()
