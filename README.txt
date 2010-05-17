@@ -161,13 +161,13 @@ have just been inserted here to make it easy to read.
 
 The only ANSI sequences that colorama converts into win32 calls are::
 
-    ESC [ 0 m       # reset all
+    ESC [ 0 m       # reset all (colors and brightness)
     ESC [ 1 m       # bright
     ESC [ 2 m       # dim (looks same as normal brightness)
     ESC [ 22 m      # normal brightness
 
     # FOREGROUND:
-    ESC [ 30 m      # blacK
+    ESC [ 30 m      # black
     ESC [ 31 m      # red
     ESC [ 32 m      # green
     ESC [ 33 m      # yellow
@@ -178,7 +178,7 @@ The only ANSI sequences that colorama converts into win32 calls are::
     ESC [ 39 m      # reset
 
     # BACKGROUND
-    ESC [ 40 m      # blacK
+    ESC [ 40 m      # black
     ESC [ 41 m      # red
     ESC [ 42 m      # green
     ESC [ 43 m      # yellow
@@ -193,8 +193,8 @@ sequence, eg::
 
     ESC [ 36 ; 45 ; 1 m     # bright cyan text on magenta background
 
-All other ANSI sequences of the form 'ESC [ XXX m' are silently stripped from
-the output on Windows.
+All other ANSI sequences of the form ``ESC [ <param> ; <param> ... <command>``
+are silently stripped from the output on Windows.
 
 Any other form of ANSI sequence, such as single-character codes or alternative
 initial characters, are not recognised nor stripped.
