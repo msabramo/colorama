@@ -160,6 +160,10 @@ this.
 Changes
 =======
 
+0.1.10
+    Stop emulating 'bright' text with bright backgrounds.
+    Display 'normal' text using win32 normal foreground instead of bright.
+    Drop support for 'dim' text.
 0.1.9
     Fix incompatibility with Python 2.5 and earlier.
     Remove setup.py dependency on setuptools, now uses stdlib distutils.
