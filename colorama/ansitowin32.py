@@ -75,7 +75,7 @@ class AnsiToWin32(object):
         stream will not be affected, nor will win32 calls be issued, so
         wrapping stdout is not actually required. This will generally be
         False on non-Windows platforms, unless optional functionality like
-        autoreset has been requested using init(autoreset=True)
+        autoreset has been requested using kwargs to init()
         '''
         return self.convert or self.strip or self.autoreset
 
