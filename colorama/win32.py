@@ -83,8 +83,10 @@ else:
 
 
 if __name__=='__main__':
-    # SetConsoleTextAttribute(STDOUT, 7)
-    #FillConsoleOutputCharacter(STDOUT, '.', 81, (1, 2))
-    # SetConsoleCursorPosition(STDOUT, (1, 2))
-    print GetConsoleScreenBufferInfo(STDOUT)
+    x = GetConsoleScreenBufferInfo(STDOUT)
+    print x.dwSize
+    print x.dwCursorPosition
+    print x.wAttributes
+    print x.srWindow
+    print x.dwMaximumWindowSize
 

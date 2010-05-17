@@ -85,7 +85,7 @@ class AnsiToWin32(object):
             return {
                 AnsiStyle.RESET_ALL: (winterm.reset_all, ),
                 AnsiStyle.BRIGHT: (winterm.style, WinStyle.BRIGHT),
-                AnsiStyle.DIM: (winterm.style, WinStyle.DIM),
+                AnsiStyle.DIM: (winterm.style, WinStyle.NORMAL),
                 AnsiStyle.NORMAL: (winterm.style, WinStyle.NORMAL),
                 AnsiFore.BLACK: (winterm.fore, WinColor.BLACK),
                 AnsiFore.RED: (winterm.fore, WinColor.RED),

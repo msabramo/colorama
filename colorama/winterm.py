@@ -15,7 +15,6 @@ class WinColor(object):
 
 # from wincon.h
 class WinStyle(object):
-    DIM    = 0x00 # dim text, dim background
     NORMAL = 0x00 # dim text, dim background
     BRIGHT = 0x08 # bright text, dim background
 
@@ -23,6 +22,8 @@ class WinStyle(object):
 class WinTerm(object):
 
     def __init__(self):
+        self._default = \
+            win32.GetConsoleScreenBufferInfo(win32.STDOUT).wAttributes
         self.default_attrs()
 
     @property
@@ -36,7 +37,7 @@ class WinTerm(object):
 
     def reset_all(self, on_stderr=None):
         self.default_attrs()
-        self.set_console()
+        self.set_console(attrs=self._default)
 
     def fore(self, fore=None, on_stderr=False):
         if fore is None:
@@ -54,9 +55,11 @@ class WinTerm(object):
         self._style = style
         self.set_console(on_stderr=on_stderr)
 
-    def set_console(self, on_stderr=False):
+    def set_console(self, attrs=None, on_stderr=False):
+        if attrs is None:
+            attrs = self.combined_attrs
         handle = win32.STDOUT
         if on_stderr:
             handle = win32.STDERR
-        win32.SetConsoleTextAttribute(handle, self.combined_attrs)
+        win32.SetConsoleTextAttribute(handle, attrs)
 
