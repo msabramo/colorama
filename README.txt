@@ -133,15 +133,71 @@ Status & Known Problems
 =======================
 
 Feature complete as far as colored text goes, but still finding bugs and
-occasionally making small changes to the API. I'd like to also handle ANSI
-codes which position the text cursor and clear the terminal.
+occasionally making small changes to the API (such as new keyword arguments
+to ``init()``).
 
 Only tested on WinXP (CMD, Console2) and Ubuntu (gnome-terminal, xterm). Much
 obliged if anyone can let me know how it fares elsewhere, in particular on
 Macs.
 
+I'd like to add the ability to handle ANSI codes which position the text cursor
+and clear the terminal.
+
 See outstanding issues and wishlist at:
 http://code.google.com/p/colorama/issues/list
+
+
+Handled ANSI Sequences
+======================
+
+ANSI sequences generally take the form:
+
+    ESC [ <param> ; <param> ... <command>
+
+Where <param> is an integer, and <command> is a single letter. Zero or more 
+params are passed to a <command>. If no params are passed, it is generally
+synonymous with passing a single zero. No spaces exist in the sequence, they
+have just been inserted here to make it easy to read.
+
+The only ANSI sequences that colorama converts into win32 calls are::
+
+    ESC [ 0 m       # reset all
+    ESC [ 1 m       # bright
+    ESC [ 2 m       # dim (looks same as normal brightness)
+    ESC [ 22 m      # normal brightness
+
+    # FOREGROUND:
+    ESC [ 30 m      # blacK
+    ESC [ 31 m      # red
+    ESC [ 32 m      # green
+    ESC [ 33 m      # yellow
+    ESC [ 34 m      # blue
+    ESC [ 35 m      # magenta
+    ESC [ 36 m      # cyan
+    ESC [ 37 m      # white
+    ESC [ 39 m      # reset
+
+    # BACKGROUND
+    ESC [ 40 m      # blacK
+    ESC [ 41 m      # red
+    ESC [ 42 m      # green
+    ESC [ 43 m      # yellow
+    ESC [ 44 m      # blue
+    ESC [ 45 m      # magenta
+    ESC [ 46 m      # cyan
+    ESC [ 47 m      # white
+    ESC [ 49 m      # reset
+
+Multiple numeric params to the 'm' command can be combined into a single
+sequence, eg::
+
+    ESC [ 36 ; 45 ; 1 m     # bright cyan text on magenta background
+
+All other ANSI sequences of the form 'ESC [ XXX m' are silently stripped from
+the output on Windows.
+
+Any other form of ANSI sequence, such as single-character codes or alternative
+initial characters, are not recognised nor stripped.
 
 
 Development
@@ -160,6 +216,10 @@ this.
 Changes
 =======
 
+0.1.11
+    Fix hard-coded reset to white-on-black colors. Fore.RESET, Back.RESET
+    and Style.RESET_ALL now revert to the colors as they were when init()
+    was called.
 0.1.10
     Stop emulating 'bright' text with bright backgrounds.
     Display 'normal' text using win32 normal foreground instead of bright.
