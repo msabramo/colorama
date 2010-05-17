@@ -147,8 +147,8 @@ See outstanding issues and wishlist at:
 http://code.google.com/p/colorama/issues/list
 
 
-Handled ANSI Sequences
-======================
+Recognised ANSI Sequences
+=========================
 
 ANSI sequences generally take the form:
 
@@ -203,14 +203,13 @@ initial characters, are not recognised nor stripped.
 Development
 ===========
 
-Tests require Michael Foord's modules 'unittest2' and 'mock', running tests
-using::
+Tests require Michael Foord's modules 'unittest2' and 'mock', and unittest2
+discovery doesn't work for colorama, so use 'nose'::
 
-    unit2 discover -p '*_test.py'
+    nosetests -s
 
-If using 'nosetests' for test discovery, be aware that it applies a proxy of
-its own to stdout, which confuses the unit tests. Use 'nosetests -s' to fix
-this.
+The -s is required because 'nosetests' otherwise applies a proxy of its own to
+stdout, which confuses the unit tests.
 
 
 Changes
