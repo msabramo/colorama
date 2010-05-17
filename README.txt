@@ -1,5 +1,7 @@
-http://pypi.python.org/pypi/colorama (docs and download)
-http://code.google.com/p/colorama/ (development)
+Download and docs:
+    http://pypi.python.org/pypi/colorama
+Development:
+    http://code.google.com/p/colorama
 
 Description
 ===========
@@ -119,7 +121,7 @@ init(wrap=True):
 
     When wrapping is disabled, colored printing on non-Windows platforms will
     continue to work as normal. To do cross-platform colored output, you can
-    use Colorama's ``AnsiToWin32`` proxy directly:
+    use Colorama's ``AnsiToWin32`` proxy directly::
 
         from colorama import init, AnsiToWin32
         init(wrap=False)
@@ -159,8 +161,8 @@ Changes
 =======
 
 0.1.9
-    Fix incompatibility with Python 2.5 and earlier
-    Remove setup.py dependency on setuptools, now uses stdlib distutils
+    Fix incompatibility with Python 2.5 and earlier.
+    Remove setup.py dependency on setuptools, now uses stdlib distutils.
 0.1.8
     Fix ghastly errors all over the place on Ubuntu.
     Add init kwargs 'convert' and 'strip', which supercede the old 'wrap'.
@@ -171,12 +173,12 @@ Changes
     Fix: Flaky interaction of interleaved ansi sent to stdout and stderr.
     Improved demo.sh (hg checkout only.)
 0.1.6
-    Fix ansi sequences with no params now default to parmlist of [0]
+    Fix ansi sequences with no params now default to parmlist of [0].
     Fix flaky behaviour of autoreset and reset_all atexit.
     Fix stacking of repeated atexit calls - now just called once.
     Fix ghastly import problems while running tests.
-    demo.py (hg checkout only) now demonstrates autoreset and reset atexit.
-    provide colorama.__version__, used by setup.py
+    'demo.py' (hg checkout only) now demonstrates autoreset and reset atexit.
+    Provide colorama.__version__, used by setup.py.
     Tests defanged so they no longer actually change terminal color when run.
 0.1.5
     Now works on Ubuntu.

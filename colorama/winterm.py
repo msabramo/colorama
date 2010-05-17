@@ -15,9 +15,9 @@ class WinColor(object):
 
 # from wincon.h
 class WinStyle(object):
-    DIM    = 0x00
-    NORMAL = 0x08
-    BRIGHT = 0x88
+    DIM    = 0x00 # dim text, dim background
+    NORMAL = 0x00 # dim text, dim background
+    BRIGHT = 0x08 # bright text, dim background
 
 
 class WinTerm(object):
