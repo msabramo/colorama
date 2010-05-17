@@ -4,9 +4,10 @@ import sys
 
 from .ansi import AnsiFore, AnsiBack, AnsiStyle, Style
 from .winterm import WinTerm, WinColor, WinStyle
+from .win32 import windll
 
-
-winterm = WinTerm()
+if windll is not None:
+    winterm = WinTerm()
 
 
 def is_a_tty(stream):
