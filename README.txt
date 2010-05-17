@@ -21,6 +21,21 @@ applications or libraries which use ANSI sequences to produce colored output on
 Linux or Macs can now also work on Windows, simply by calling
 ``colorama.init()``.
 
+A demo script in the source code repository prints some colored text using
+ANSI sequences. Compare its output under Gnome-terminal's built in ANSI
+handling, versus on Windows Command-Prompt using Colorama:
+
+.. image:: http://colorama.googlecode.com/hg/screenshots/ubuntu-demo.png
+    :width: 661
+    :height: 357
+    :alt: ANSI sequences on Ubuntu under gnome-terminal.
+
+.. image:: http://colorama.googlecode.com/hg/screenshots/windows-demo.png
+    :width: 668
+    :height: 325
+    :alt: Same ANSI sequences on Windows, using Colorama.
+
+
 Dependencies
 ============
 
