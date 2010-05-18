@@ -230,14 +230,16 @@ stdout, which confuses the unit tests.
 Changes
 =======
 
-0.1.13
-    Previous version was completely broken (contained no source). Double oops.
-0.1.12
-    Fix fatal import errors on Ubuntu. oops.
-0.1.11
+0.1.14
     Fix hard-coded reset to white-on-black colors. Fore.RESET, Back.RESET
     and Style.RESET_ALL now revert to the colors as they were when init()
-    was called.
+    was called. Some lessons hopefully learned about testing prior to release.
+0.1.13
+    Completely broken: barfed when installed using pip.
+0.1.12
+    Completely broken: contained no source code. double oops.
+0.1.11
+    Completely broken: fatal import errors on Ubuntu. oops.
 0.1.10
     Stop emulating 'bright' text with bright backgrounds.
     Display 'normal' text using win32 normal foreground instead of bright.

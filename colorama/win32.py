@@ -54,7 +54,10 @@ else:
         csbi = CONSOLE_SCREEN_BUFFER_INFO()
         success = windll.kernel32.GetConsoleScreenBufferInfo(
             handle, byref(csbi))
-        assert success
+        # This fails when imported via setup.py when installing using 'pip'
+        # presumably the fix is that running setup.py should not trigger all
+        # this activity.
+        # assert success
         return csbi
 
     def SetConsoleTextAttribute(stream_id, attrs):

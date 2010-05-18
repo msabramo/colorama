@@ -8,6 +8,7 @@ from colorama import __version__
 
 name = 'colorama'
 
+
 def get_long_description(filename):
     readme = join(dirname(__file__), filename)
     return open(readme).read()
