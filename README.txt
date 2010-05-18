@@ -230,6 +230,8 @@ stdout, which confuses the unit tests.
 Changes
 =======
 
+0.1.13
+    Previous version was completely broken (contained no source). Double oops.
 0.1.12
     Fix fatal import errors on Ubuntu. oops.
 0.1.11
