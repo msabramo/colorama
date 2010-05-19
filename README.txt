@@ -35,6 +35,9 @@ handling, versus on Windows Command-Prompt using Colorama:
     :height: 325
     :alt: Same ANSI sequences on Windows, using Colorama.
 
+These screengrabs make it clear that Colorama on Windows does not support
+ANSI 'dim text': it looks the same as 'normal text'.
+
 
 Dependencies
 ============
