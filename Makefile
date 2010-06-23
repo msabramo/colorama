@@ -3,7 +3,7 @@
 # a WindowsXP terminal with Cygwin binaries on the path.
 
 clean:
-	-rm -rf build dist
+	-rm -rf build dist MANIFEST
 	-find . -name '*.py[oc]' -exec rm {} \;
 .PHONY: clean
 

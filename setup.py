@@ -25,6 +25,7 @@ setup(
     url='http://code.google.com/p/colorama/',
     license='BSD',
     packages=[name],
+    # see classifiers http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Environment :: Console',
@@ -38,6 +39,5 @@ setup(
         'Programming Language :: Python :: 3.1',
         'Topic :: Terminals',
     ]
-    # see classifiers http://pypi.python.org/pypi?%3Aaction=list_classifiers
 )
 
