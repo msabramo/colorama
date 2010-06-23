@@ -87,9 +87,9 @@ else:
 
 if __name__=='__main__':
     x = GetConsoleScreenBufferInfo(STDOUT)
-    print x.dwSize
-    print x.dwCursorPosition
-    print x.wAttributes
-    print x.srWindow
-    print x.dwMaximumWindowSize
+    print(x.dwSize)
+    print(x.dwCursorPosition)
+    print(x.wAttributes)
+    print(x.srWindow)
+    print(x.dwMaximumWindowSize)
 
