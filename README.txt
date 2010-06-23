@@ -164,6 +164,9 @@ and clear the terminal.
 See outstanding issues and wishlist at:
 http://code.google.com/p/colorama/issues/list
 
+If anything doesn't work for you, or doesn't do what you expected or hoped for,
+I'd *love* to hear about it on that issues list.
+
 
 Recognised ANSI Sequences
 =========================
@@ -230,9 +233,17 @@ The -s is required because 'nosetests' otherwise applies a proxy of its own to
 stdout, which confuses the unit tests.
 
 
+Thanks
+======
+Roger Binns, for many suggestions, valuable feedback, & bug reports.
+Tim Golden for thought and much appreciated feedback on the initial idea.
+
+
 Changes
 =======
 
+0.1.15
+    Fix python3 incompatibility kindly reported by Günter Kolousek
 0.1.14
     Fix hard-coded reset to white-on-black colors. Fore.RESET, Back.RESET
     and Style.RESET_ALL now revert to the colors as they were when init()
