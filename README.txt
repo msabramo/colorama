@@ -242,7 +242,11 @@ Tim Golden for thought and much appreciated feedback on the initial idea.
 Changes
 =======
 
+0.1.16
+    Re-upload to fix previous error. Make clean now removes old MANIFEST.
 0.1.15
+    Completely broken. Distribution was empty due to leftover invalid MANIFEST
+    file from building on a different platform.
     Fix python3 incompatibility kindly reported by Günter Kolousek
 0.1.14
     Fix hard-coded reset to white-on-black colors. Fore.RESET, Back.RESET
