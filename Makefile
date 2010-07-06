@@ -11,8 +11,8 @@ sdist: clean
 	python setup.py sdist --formats=zip,gztar
 .PHONY: sdist
 
-release: sdist
-	python setup.py register upload
+release: clean
+	python setup.py sdist --formats=zip,gztar register upload
 .PHONY: release
 
 test:
