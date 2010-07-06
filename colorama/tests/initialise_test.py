@@ -1,6 +1,9 @@
 
 import sys
-from unittest2 import TestCase, main
+try:
+    from unittest2 import TestCase, main
+except ImportError:
+    from unittest import TestCase, main
 
 from mock import patch
 
@@ -98,6 +101,15 @@ class InitTest(TestCase):
                 mockATW32.call_args_list[4][1]['autoreset'], False)
             self.assertEquals(
                 mockATW32.call_args_list[5][1]['autoreset'], False)
+
+
+    @patch('colorama.initialise.atexit.register')
+    def testAtexitRegisteredOnlyOnce(self, mockRegister):
+        init()
+        self.assertTrue(mockRegister.called)
+        mockRegister.reset_mock()
+        init()
+        self.assertFalse(mockRegister.called)
 
 
 if __name__ == '__main__':
