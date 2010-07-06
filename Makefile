@@ -1,14 +1,18 @@
-# This makefile acts as a cheatsheet to remind me of some commonly used
-# commands. I generally am executing these commands from an Ubuntu terminal, or
-# a WindowsXP terminal with Cygwin binaries on the path.
+# This makefile is just a cheatsheet to remind me of some commonly used
+# commands. I generally am executing these commands on Ubuntu, or on WindowsXP
+# with Cygwin binaries at the start of the PATH.
 
 clean:
 	-rm -rf build dist MANIFEST
 	-find . -name '*.py[oc]' -exec rm {} \;
 .PHONY: clean
 
-release: clean
-	python setup.py sdist --formats=zip,gztar register upload
+sdist: clean
+	python setup.py sdist --formats=zip,gztar
+.PHONY: sdist
+
+release: sdist
+	python setup.py register upload
 .PHONY: release
 
 test:
