@@ -3,10 +3,10 @@
 from os.path import dirname, join
 from distutils.core import setup
 
-from colorama import __version__
+from colorama import VERSION
 
 
-name = 'colorama'
+NAME = 'colorama'
 
 
 def get_long_description(filename):
@@ -15,8 +15,8 @@ def get_long_description(filename):
 
 
 setup(
-    name=name,
-    version=__version__,
+    name=NAME,
+    version=VERSION,
     description="Cross-platform colored terminal text.",
     long_description=get_long_description('README.txt'),
     keywords='color colour terminal text ansi windows crossplatform xplatform',
@@ -24,7 +24,7 @@ setup(
     author_email='tartley@tartley.com',
     url='http://code.google.com/p/colorama/',
     license='BSD',
-    packages=[name],
+    packages=[NAME],
     # see classifiers http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
@@ -35,6 +35,7 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.5',
         'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.1',
         'Topic :: Terminals',

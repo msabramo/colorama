@@ -224,8 +224,11 @@ initial characters, are not recognised nor stripped.
 Development
 ===========
 
-Tests require Michael Foord's modules 'unittest2' and 'mock', and unittest2
-discovery doesn't work for colorama, so use 'nose'::
+Tests require:
+  * Michael Foord's 'mock' module to be installed.
+  * Either to be run under Python27/31 unittest, or have Michael Foord's
+    'unittest2' module to be installed.
+unittest2 test discovery doesn't work for colorama, so I use 'nose'::
 
     nosetests -s
 
@@ -242,6 +245,8 @@ Tim Golden for thought and much appreciated feedback on the initial idea.
 Changes
 =======
 
+0.1.17
+    Prevent printing of garbage ANSI codes upon installing with pip
 0.1.16
     Re-upload to fix previous error. Make clean now removes old MANIFEST.
 0.1.15
@@ -280,7 +285,7 @@ Changes
     Fix stacking of repeated atexit calls - now just called once.
     Fix ghastly import problems while running tests.
     'demo.py' (hg checkout only) now demonstrates autoreset and reset atexit.
-    Provide colorama.__version__, used by setup.py.
+    Provide colorama.VERSION, used by setup.py.
     Tests defanged so they no longer actually change terminal color when run.
 0.1.5
     Now works on Ubuntu.
