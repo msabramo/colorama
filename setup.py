@@ -17,7 +17,7 @@ def get_long_description(filename):
 setup(
     name=NAME,
     version=VERSION,
-    description="Cross-platform colored terminal text.",
+    description='Cross-platform colored terminal text.',
     long_description=get_long_description('README.txt'),
     keywords='color colour terminal text ansi windows crossplatform xplatform',
     author='Jonathan Hartley',

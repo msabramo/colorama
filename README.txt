@@ -42,7 +42,7 @@ ANSI 'dim text': it looks the same as 'normal text'.
 Dependencies
 ============
 
-None, other than Python. Tested on Python 2.5.5, 2.6.5 & 3.1.2.
+None, other than Python. Tested on Python 2.5.5, 2.6.5, 2.7 & 3.1.2.
 
 
 Usage
@@ -224,10 +224,12 @@ initial characters, are not recognised nor stripped.
 Development
 ===========
 
-Tests require:
-  * Michael Foord's 'mock' module to be installed.
-  * Either to be run under Python27/31 unittest, or have Michael Foord's
-    'unittest2' module to be installed.
+Running tests requires:
+
+- Michael Foord's 'mock' module to be installed.
+- Either to be run under Python2.7 or 3.1 stdlib unittest, or to have Michael
+  Foord's 'unittest2' module to be installed.
+
 unittest2 test discovery doesn't work for colorama, so I use 'nose'::
 
     nosetests -s
@@ -252,7 +254,7 @@ Changes
 0.1.15
     Completely broken. Distribution was empty due to leftover invalid MANIFEST
     file from building on a different platform.
-    Fix python3 incompatibility kindly reported by Günter Kolousek
+    Fix python3 incompatibility kindly reported by G |uumlaut| nter Kolousek
 0.1.14
     Fix hard-coded reset to white-on-black colors. Fore.RESET, Back.RESET
     and Style.RESET_ALL now revert to the colors as they were when init()
@@ -299,4 +301,7 @@ Changes
     Minor tidy
 0.1
     Works on Windows for foreground color, background color, bright or dim
+
+.. |uumlaut| unicode:: U+00FC .. u with umlaut
+   :trim:
 
