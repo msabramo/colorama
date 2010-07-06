@@ -1,7 +1,10 @@
 
-from unittest2 import TestCase, main
-
 from mock import Mock, patch
+try:
+    from unittest2 import TestCase, main
+except ImportError:
+    from unittest import TestCase, main
+
 
 from ..winterm import WinColor, WinStyle, WinTerm
 

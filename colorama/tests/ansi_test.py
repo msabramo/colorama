@@ -1,6 +1,9 @@
 
 import sys
-from unittest2 import TestCase, main
+try:
+    from unittest2 import TestCase, main
+except ImportError:
+    from unittest import TestCase, main
 
 from ..ansi import Fore, Back, Style
 from ..ansitowin32 import AnsiToWin32
