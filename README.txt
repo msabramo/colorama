@@ -76,7 +76,7 @@ constant shorthand for ANSI escape sequences::
     print Fore.RED + 'some red text'
     print Back.GREEN + and with a green background'
     print Style.DIM + 'and in dim text'
-    print + Fore.DEFAULT + Back.DEFAULT + Style.DEFAULT
+    print + Fore.RESET + Back.RESET + Style.RESET_ALL
     print 'back to normal now'
 
 or simply by manually printing ANSI sequences from your own code::
@@ -98,8 +98,8 @@ such as Termcolor::
 
 Available formatting constants are::
 
-    Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, DEFAULT.
-    Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, DEFAULT.
+    Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
+    Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
     Style: DIM, NORMAL, BRIGHT, RESET_ALL
 
 Style.RESET_ALL resets foreground, background and brightness. Colorama will
@@ -247,6 +247,8 @@ Tim Golden for thought and much appreciated feedback on the initial idea.
 Changes
 =======
 
+0.1.18
+    Fix README (no such attr as Fore.DEFAULT, etc), kindly reported by nodakai.
 0.1.17
     Prevent printing of garbage ANSI codes upon installing with pip
 0.1.16

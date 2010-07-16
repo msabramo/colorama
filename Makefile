@@ -2,6 +2,8 @@
 # commands. I generally am executing these commands on Ubuntu, or on WindowsXP
 # with Cygwin binaries at the start of the PATH.
 
+NAME=colorama
+
 clean:
 	-rm -rf build dist MANIFEST
 	-find . -name '*.py[oc]' -exec rm {} \;
@@ -20,6 +22,6 @@ test:
 .PHONY: test
 
 tags:
-	ctags -R colorama setup.py
+	ctags -R ${NAME}
 .PHONY: tags
 
