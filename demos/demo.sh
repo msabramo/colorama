@@ -13,7 +13,8 @@ python demo02.py
 
 python demo03.py
 
-python demo04.py
+rm -f demo04.out
+python demo04.py 2> demo04.out
 
 python demo05.py
 
