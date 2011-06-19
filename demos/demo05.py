@@ -5,6 +5,7 @@
 
 from __future__ import print_function
 import sys
+import fixpath
 from colorama import AnsiToWin32, init, Fore
 
 init()

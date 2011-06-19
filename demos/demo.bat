@@ -1,4 +1,3 @@
-@rem!/usr/bin/env bash
 
 @rem Script to demonstrate features of colorama.
 

@@ -5,11 +5,15 @@
 # This should run more-or-less identically on Windows and Unix.
 from __future__ import print_function
 import sys
+
+# Add parent dir to sys path, so the following 'import colorama' always finds
+# the local source in preference to any installed version of colorama.
+import fixpath
 from colorama import init, Fore, Back, Style
 
 init()
 
-# Fore, Back and Style are convenience classes for the constant ANSI strings that set 
+# Fore, Back and Style are convenience classes for the constant ANSI strings that set
 #     the foreground, background and style. The don't have any magic of their own.
 FORES = [ Fore.BLACK, Fore.RED, Fore.GREEN, Fore.YELLOW, Fore.BLUE, Fore.MAGENTA, Fore.CYAN, Fore.WHITE ]
 BACKS = [ Back.BLACK, Back.RED, Back.GREEN, Back.YELLOW, Back.BLUE, Back.MAGENTA, Back.CYAN, Back.WHITE ]

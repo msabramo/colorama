@@ -2,6 +2,7 @@
 # check that stripped ANSI in redirected stderr does not affect stdout
 from __future__ import print_function
 import sys
+import fixpath
 from colorama import init, Fore, AnsiToWin32
 
 init()
