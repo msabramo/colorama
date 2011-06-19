@@ -150,16 +150,9 @@ init(wrap=True):
 Status & Known Problems
 =======================
 
-Feature complete as far as colored text goes, but still finding bugs and
-occasionally making small changes to the API (such as new keyword arguments
-to ``init()``).
-
-Only tested on WinXP (CMD, Console2) and Ubuntu (gnome-terminal, xterm). Much
-obliged if anyone can let me know how it fares elsewhere, in particular on
-Macs.
-
-I'd like to add the ability to handle ANSI codes which position the text cursor
-and clear the terminal.
+I've personally only tested it on WinXP (CMD, Console2) and Ubuntu
+(gnome-terminal, xterm), although it sounds like others are using it on other
+platforms too.
 
 See outstanding issues and wishlist at:
 http://code.google.com/p/colorama/issues/list
@@ -240,6 +233,8 @@ stdout, which confuses the unit tests.
 
 Thanks
 ======
+Daniel Griffith for multiple fabulous patches.
+Oscar Lester for valuable fix to stop ANSI chars being sent to non-tty output.
 Roger Binns, for many suggestions, valuable feedback, & bug reports.
 Tim Golden for thought and much appreciated feedback on the initial idea.
 
@@ -247,6 +242,13 @@ Tim Golden for thought and much appreciated feedback on the initial idea.
 Changes
 =======
 
+0.2
+    Merge in changes from Daniel Griffith:
+        Add ANSI cursor positioning & partial support for clear screen.
+        Patch submitted by Oscar Lester, don't send RESET_ALL to non-tty.
+        Demos split into separate files and moved into their own directory.
+    Tweak sys.path in demos so they run against local source, not installed
+    version of Colorama.
 0.1.18
     Fix README (no such attr as Fore.DEFAULT, etc), kindly reported by nodakai.
 0.1.17
