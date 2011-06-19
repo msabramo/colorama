@@ -265,7 +265,8 @@ Changes
 
 0.2.1
     Added some documentation for cursor positioning and clear screen to README.
-    Add '
+    Add 'reinit' and 'deinit' functions, as suggested by Charles FOL and
+    Romanov DA.
 0.2
     Merge in changes from Daniel Griffith: Add ANSI cursor positioning &
     partial support for clear screen. Patch submitted by Oscar Lester, don't
