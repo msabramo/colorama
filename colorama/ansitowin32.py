@@ -118,7 +118,7 @@ class AnsiToWin32(object):
             self.wrapped.flush()
         if self.autoreset:
             self.reset_all()
-        
+
 
     def reset_all(self):
         if self.convert:
@@ -179,3 +179,4 @@ class AnsiToWin32(object):
         elif command in ('J'):
             func = winterm.erase_data
             func(params, on_stderr=self.on_stderr)
+

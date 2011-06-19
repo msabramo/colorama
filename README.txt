@@ -65,6 +65,12 @@ optional functionality, see keyword args below.) The intention is that
 applications can call ``init()`` unconditionally on all platforms, after which
 ANSI output should just work.
 
+To stop using colorama before your program exits, simply call ``deinit()``.
+This will restore stdout and stderr to their original values, so that Colorama
+is disabled. To start using Colorama again, call ``reinit()``, which wraps
+stdout and stderr again, but is cheaper to call than doing ``init()`` all over
+again.
+
 
 Colored Output
 --------------
@@ -259,7 +265,7 @@ Changes
 
 0.2.1
     Added some documentation for cursor positioning and clear screen to README.
-
+    Add '
 0.2
     Merge in changes from Daniel Griffith: Add ANSI cursor positioning &
     partial support for clear screen. Patch submitted by Oscar Lester, don't
