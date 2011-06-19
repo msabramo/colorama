@@ -6,14 +6,14 @@ Development:
 Description
 ===========
 
-Makes ANSI escape character sequences for producing colored terminal text work
-under MS Windows.
+Makes ANSI escape character sequences, for producing colored terminal text and
+cursor positioning, work under MS Windows.
 
 ANSI escape character sequences have long been used to produce colored terminal
-text on Unix and Macs. Colorama makes this work on Windows, too. It also
-provides some shortcuts to help generate ANSI sequences, and works fine in
-conjunction with any other ANSI sequence generation library, such as Termcolor
-(http://pypi.python.org/pypi/termcolor.)
+text and cursor positioning on Unix and Macs. Colorama makes this work on
+Windows, too. It also provides some shortcuts to help generate ANSI sequences,
+and works fine in conjunction with any other ANSI sequence generation library,
+such as Termcolor (http://pypi.python.org/pypi/termcolor.)
 
 This has the upshot of providing a simple cross-platform API for printing
 colored terminal text from Python, and has the happy side-effect that existing
@@ -21,8 +21,8 @@ applications or libraries which use ANSI sequences to produce colored output on
 Linux or Macs can now also work on Windows, simply by calling
 ``colorama.init()``.
 
-A demo script in the source code repository prints some colored text using
-ANSI sequences. Compare its output under Gnome-terminal's built in ANSI
+Demo scripts in the source code repository prints some colored text using
+ANSI sequences. Compare their output under Gnome-terminal's built in ANSI
 handling, versus on Windows Command-Prompt using Colorama:
 
 .. image:: http://colorama.googlecode.com/hg/screenshots/ubuntu-demo.png
@@ -35,8 +35,8 @@ handling, versus on Windows Command-Prompt using Colorama:
     :height: 325
     :alt: Same ANSI sequences on Windows, using Colorama.
 
-These screengrabs make it clear that Colorama on Windows does not support
-ANSI 'dim text': it looks the same as 'normal text'.
+These screengrabs show that Colorama on Windows does not support ANSI 'dim
+text': it looks the same as 'normal text'.
 
 
 Dependencies
@@ -104,6 +104,13 @@ Available formatting constants are::
 
 Style.RESET_ALL resets foreground, background and brightness. Colorama will
 perform this reset automatically on program exit.
+
+
+Cursor Positioning
+------------------
+
+ANSI codes to reposition the cursor are supported. See demos/demo06.py for
+an example of how to generate them.
 
 
 Init Keyword Args
@@ -202,6 +209,14 @@ The only ANSI sequences that colorama converts into win32 calls are::
     ESC [ 47 m      # white
     ESC [ 49 m      # reset
 
+    # cursor positioning
+    ESC [ x;y H     # position cursor at x,y
+
+    # clear the screen
+    ESC [ mode J    # clear the screen. Only mode 2 (clear entire screen)
+                    # is supported. It should be easy to add other modes,
+                    # let me know if that would be useful.
+
 Multiple numeric params to the 'm' command can be combined into a single
 sequence, eg::
 
@@ -242,13 +257,15 @@ Tim Golden for thought and much appreciated feedback on the initial idea.
 Changes
 =======
 
+0.2.1
+    Added some documentation for cursor positioning and clear screen to README.
+
 0.2
-    Merge in changes from Daniel Griffith:
-        Add ANSI cursor positioning & partial support for clear screen.
-        Patch submitted by Oscar Lester, don't send RESET_ALL to non-tty.
-        Demos split into separate files and moved into their own directory.
-    Tweak sys.path in demos so they run against local source, not installed
-    version of Colorama.
+    Merge in changes from Daniel Griffith: Add ANSI cursor positioning &
+    partial support for clear screen. Patch submitted by Oscar Lester, don't
+    send RESET_ALL to non-tty. Demos split into separate files and moved into
+    their own directory. Tweak sys.path in demos so they run against local
+    source, not installed version of Colorama.
 0.1.18
     Fix README (no such attr as Fore.DEFAULT, etc), kindly reported by nodakai.
 0.1.17
