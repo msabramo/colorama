@@ -19,9 +19,10 @@ def reset_all():
 
 def init(autoreset=False, convert=None, strip=None, wrap=True):
 
-    if wrap and any(autoreset, convert, strip):
+    if not wrap and any([autoreset, convert, strip]):
         raise ValueError('wrap=False conflicts with any other arg=True')
 
+    global wrapped_stdout, wrapped_stderr
     sys.stdout = wrapped_stdout = \
         wrap_stream(orig_stdout, convert, strip, autoreset, wrap)
     sys.stderr = wrapped_stderr = \

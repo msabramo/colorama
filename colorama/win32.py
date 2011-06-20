@@ -70,8 +70,7 @@ else:
 
     def SetConsoleTextAttribute(stream_id, attrs):
         handle = handles[stream_id]
-        success = windll.kernel32.SetConsoleTextAttribute(handle, attrs)
-        assert success
+        return windll.kernel32.SetConsoleTextAttribute(handle, attrs)
 
     def SetConsoleCursorPosition(stream_id, position):
         position = COORD(*position)
@@ -89,7 +88,6 @@ else:
         # Resume normal processing
         handle = handles[stream_id]
         success = windll.kernel32.SetConsoleCursorPosition(handle, adjusted_position)
-        assert success
         return success
 
     def FillConsoleOutputCharacter(stream_id, char, length, start):
@@ -100,7 +98,6 @@ else:
         # Note that this is hard-coded for ANSI (vs wide) bytes.
         success = windll.kernel32.FillConsoleOutputCharacterA(
             handle, char, length, start, byref(num_written))
-        assert success
         return num_written.value
 
     def FillConsoleOutputAttribute(stream_id, attr, length, start):
@@ -112,7 +109,6 @@ else:
         # Note that this is hard-coded for ANSI (vs wide) bytes.
         success = windll.kernel32.FillConsoleOutputAttribute(
             handle, attribute, length, start, byref(num_written))
-        assert success
         return success
 
 
