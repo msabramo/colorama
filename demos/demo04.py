@@ -3,7 +3,7 @@
 from __future__ import print_function
 import sys
 import fixpath
-from colorama import init, Fore, AnsiToWin32
+from colorama import init, Fore
 
 init()
 print(Fore.GREEN + 'GREEN set on stdout. ', end='')
