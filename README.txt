@@ -232,7 +232,9 @@ All other ANSI sequences of the form ``ESC [ <param> ; <param> ... <command>``
 are silently stripped from the output on Windows.
 
 Any other form of ANSI sequence, such as single-character codes or alternative
-initial characters, are not recognised nor stripped.
+initial characters, are not recognised nor stripped. It would be cool to add
+them though. Let me know if it would be useful for you, via the issues on
+google code.
 
 
 Development
