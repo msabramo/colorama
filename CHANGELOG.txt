@@ -1,3 +1,5 @@
+0.2.3
+	Split changelog out into separate file.
 0.2.2
     Fix bug which caused init() to raise, introduced in 0.2.1.
     Remove asserts which cause problems in various circumstances. At least

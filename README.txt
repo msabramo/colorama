@@ -42,7 +42,7 @@ text': it looks the same as 'normal text'.
 Dependencies
 ============
 
-None, other than Python. Tested on Python 2.5.5, 2.6.5, 2.7 & 3.1.2.
+None, other than Python. Tested on Python 2.5.5, 2.6.5, 2.7, 3.1.2, and 3.2
 
 
 Usage
