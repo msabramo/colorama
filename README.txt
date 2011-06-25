@@ -243,8 +243,9 @@ Development
 Running tests requires:
 
 - Michael Foord's 'mock' module to be installed.
-- Either to be run under Python2.7 or 3.1 stdlib unittest, or to have Michael
-  Foord's 'unittest2' module to be installed.
+- Tests are written using the 2010 era updates to 'unittest', and require to
+  be run either using Python2.7 or greater, or else to have Michael Foord's
+  'unittest2' module installed.
 
 unittest2 test discovery doesn't work for colorama, so I use 'nose'::
 
