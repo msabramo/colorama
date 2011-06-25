@@ -20,7 +20,7 @@ register: clean
 	python setup.py --formats=zip,gztar sdist register 
 .PHONY: release
 
-release: clean
+upload: clean
 	python setup.py --formats=zip,gztar sdist register upload
 .PHONY: release
 
