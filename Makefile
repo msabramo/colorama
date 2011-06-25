@@ -13,15 +13,15 @@ docs:
 	rst2html README.rst README.html
 
 sdist: clean
-	python setup.py --formats=zip,gztar sdist
+	python setup.py sdist --formats=zip,gztar
 .PHONY: sdist
 
 register: clean
-	python setup.py --formats=zip,gztar sdist register 
+	python setup.py sdist --formats=zip,gztar register 
 .PHONY: release
 
 upload: clean
-	python setup.py --formats=zip,gztar sdist register upload
+	python setup.py sdist --formats=zip,gztar register upload
 .PHONY: release
 
 test:
