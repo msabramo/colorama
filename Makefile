@@ -9,6 +9,9 @@ clean:
 	-find . -name '*.py[oc]' -exec rm {} \;
 .PHONY: clean
 
+docs:
+	rst2html README.rst README.html
+
 sdist: clean
 	python setup.py sdist --formats=zip,gztar
 .PHONY: sdist

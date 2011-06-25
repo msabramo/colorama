@@ -62,20 +62,18 @@ else:
         csbi = CONSOLE_SCREEN_BUFFER_INFO()
         success = windll.kernel32.GetConsoleScreenBufferInfo(
             handle, byref(csbi))
-        # This fails when imported via setup.py when installing using 'pip'
-        # presumably the fix is that running setup.py should not trigger all
-        # this activity.
-        # assert success
         return csbi
+
 
     def SetConsoleTextAttribute(stream_id, attrs):
         handle = handles[stream_id]
         return windll.kernel32.SetConsoleTextAttribute(handle, attrs)
 
+
     def SetConsoleCursorPosition(stream_id, position):
         position = COORD(*position)
         # If the position is out of range, do nothing.
-        if position.Y <= 0 or position.X <= 0: 
+        if position.Y <= 0 or position.X <= 0:
             return
         # Adjust for Windows' SetConsoleCursorPosition:
         #    1. being 0-based, while ANSI is 1-based.
@@ -87,8 +85,7 @@ else:
         adjusted_position.X += sr.Left
         # Resume normal processing
         handle = handles[stream_id]
-        success = windll.kernel32.SetConsoleCursorPosition(handle, adjusted_position)
-        return success
+        return windll.kernel32.SetConsoleCursorPosition(handle, adjusted_position)
 
     def FillConsoleOutputCharacter(stream_id, char, length, start):
         handle = handles[stream_id]
@@ -107,17 +104,6 @@ else:
         length = DWORD(length)
         num_written = DWORD(0)
         # Note that this is hard-coded for ANSI (vs wide) bytes.
-        success = windll.kernel32.FillConsoleOutputAttribute(
+        return windll.kernel32.FillConsoleOutputAttribute(
             handle, attribute, length, start, byref(num_written))
-        return success
-
-
-if __name__=='__main__':
-    x = GetConsoleScreenBufferInfo(STDOUT)
-    print(x)
-    print('dwSize(height,width)                    = (%d,%d)' % (x.dwSize.Y, x.dwSize.X))
-    print('dwCursorPosition(y,x)                   = (%d,%d)' % (x.dwCursorPosition.Y, x.dwCursorPosition.X))
-    print('wAttributes(color)                      =  %d = 0x%02x' % (x.wAttributes, x.wAttributes))
-    print('srWindow(Top,Left)-(Bottom,Right)       = (%d,%d)-(%d,%d)' % (x.srWindow.Top, x.srWindow.Left, x.srWindow.Bottom, x.srWindow.Right))
-    print('dwMaximumWindowSize(maxHeight,maxWidth) = (%d,%d)' % (x.dwMaximumWindowSize.Y, x.dwMaximumWindowSize.X))
 

@@ -73,3 +73,7 @@
 0.1
     Works on Windows for foreground color, background color, bright or dim
 
+
+.. |uumlaut| unicode:: U+00FC .. u with umlaut
+   :trim:
+

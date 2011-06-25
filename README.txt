@@ -257,11 +257,7 @@ stdout, which confuses the unit tests.
 Thanks
 ======
 Daniel Griffith for multiple fabulous patches.
-Oscar Lester for valuable fix to stop ANSI chars being sent to non-tty output.
+Oscar Lesta for valuable fix to stop ANSI chars being sent to non-tty output.
 Roger Binns, for many suggestions, valuable feedback, & bug reports.
 Tim Golden for thought and much appreciated feedback on the initial idea.
-
-
-.. |uumlaut| unicode:: U+00FC .. u with umlaut
-   :trim:
 
