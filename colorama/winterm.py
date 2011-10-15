@@ -66,6 +66,14 @@ class WinTerm(object):
             handle = win32.STDERR
         win32.SetConsoleTextAttribute(handle, attrs)
 
+    def get_position(self, handle):
+        position = win32.GetConsoleScreenBufferInfo(handle).dwCursorPosition
+        # Because Windows coordinates are 0-based,
+        # and win32.SetConsoleCursorPosition expects 1-based.
+        position.X += 1
+        position.Y += 1
+        return position
+    
     def set_cursor_position(self, position=None, on_stderr=False):
         if position is None:
             #I'm not currently tracking the position, so there is no default.
@@ -76,13 +84,23 @@ class WinTerm(object):
             handle = win32.STDERR
         win32.SetConsoleCursorPosition(handle, position)
 
+    def cursor_up(self, num_rows=0, on_stderr=False):
+        if num_rows == 0:
+            return
+        handle = win32.STDOUT
+        if on_stderr:
+            handle = win32.STDERR
+        position = self.get_position(handle)
+        adjusted_position = (position.Y - num_rows, position.X)
+        self.set_cursor_position(adjusted_position, on_stderr)
+
     def erase_data(self, mode=0, on_stderr=False):
         # 0 (or None) should clear from the cursor to the end of the screen.
         # 1 should clear from the cursor to the beginning of the screen.
         # 2 should clear the entire screen. (And maybe move cursor to (1,1)?)
         #
-        # At the moment, I only support mode 2. From looking at the API, it 
-        #    should be possible to calculate a different number of bytes to clear, 
+        # At the moment, I only support mode 2. From looking at the API, it
+        #    should be possible to calculate a different number of bytes to clear,
         #    and to do so relative to the cursor position.
         if mode[0] not in (2,):
             return
@@ -90,7 +108,7 @@ class WinTerm(object):
         if on_stderr:
             handle = win32.STDERR
         # here's where we'll home the cursor
-        coord_screen = win32.COORD(0,0) 
+        coord_screen = win32.COORD(0,0)
         csbi = win32.GetConsoleScreenBufferInfo(handle)
         # get the number of character cells in the current buffer
         dw_con_size = csbi.dwSize.X * csbi.dwSize.Y
