@@ -2,6 +2,8 @@ Download and docs:
     http://pypi.python.org/pypi/colorama
 Development:
     http://code.google.com/p/colorama
+Discussion group:
+     https://groups.google.com/forum/#!forum/python-colorama
 
 Description
 ===========
