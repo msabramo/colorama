@@ -269,6 +269,7 @@ stdout, which confuses the unit tests.
 
 Thanks
 ======
+| User 'vaal1239', Dave Mckee & Lackner Kristof for Win7 fix.
 | User 'stuyck', for suggesting Python3 compatible updates to README.
 | Daniel Griffith for multiple fabulous patches.
 | Oscar Lesta for valuable fix to stop ANSI chars being sent to non-tty output.
