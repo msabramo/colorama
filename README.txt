@@ -81,16 +81,16 @@ Cross-platform printing of colored text can then be done using Colorama's
 constant shorthand for ANSI escape sequences::
 
     from colorama import Fore, Back, Style
-    print Fore.RED + 'some red text'
-    print Back.GREEN + and with a green background'
-    print Style.DIM + 'and in dim text'
-    print + Fore.RESET + Back.RESET + Style.RESET_ALL
-    print 'back to normal now'
+    print(Fore.RED + 'some red text')
+    print(Back.GREEN + and with a green background')
+    print(Style.DIM + 'and in dim text')
+    print(+ Fore.RESET + Back.RESET + Style.RESET_ALL)
+    print('back to normal now')
 
 or simply by manually printing ANSI sequences from your own code::
 
-    print '/033[31m' + 'some red text'
-    print '/033[30m' # and reset to default color
+    print('/033[31m' + 'some red text')
+    print('/033[30m' # and reset to default color)
 
 or Colorama can be used happily in conjunction with existing ANSI libraries
 such as Termcolor::
@@ -102,7 +102,7 @@ such as Termcolor::
     init()
 
     # then use Termcolor for all colored text output
-    print colored('Hello, World!', 'green', 'on_red')
+    print(colored('Hello, World!', 'green', 'on_red'))
 
 Available formatting constants are::
 
@@ -133,8 +133,8 @@ init(autoreset=False):
 
         from colorama import init
         init(autoreset=True)
-        print Fore.RED + 'some red text'
-        print 'automatically back to default color again'
+        print(Fore.RED + 'some red text')
+        print('automatically back to default color again')
 
 init(strip=None):
     Pass ``True`` or ``False`` to override whether ansi codes should be
@@ -156,24 +156,34 @@ init(wrap=True):
     continue to work as normal. To do cross-platform colored output, you can
     use Colorama's ``AnsiToWin32`` proxy directly::
 
+        import sys
         from colorama import init, AnsiToWin32
         init(wrap=False)
         stream = AnsiToWin32(sys.stderr).stream
+
+        # Python 2
         print >>stream, Fore.BLUE + 'blue text on stderr'    
 
+        # Python 3
+        print(Fore.BLUE + 'blue text on stderr', file=stream)
+        
 
 Status & Known Problems
 =======================
 
-I've personally only tested it on WinXP (CMD, Console2) and Ubuntu
-(gnome-terminal, xterm), although it sounds like others are using it on other
-platforms too.
+I've personally only tested it on WinXP (CMD, Console2), Ubuntu 
+(gnome-terminal, xterm), and OSX.
+
+Some presumably valid ANSI sequences aren't recognised (see details below)
+but to my knowledge nobody has yet complained about this. Puzzling.
 
 See outstanding issues and wishlist at:
 http://code.google.com/p/colorama/issues/list
 
 If anything doesn't work for you, or doesn't do what you expected or hoped for,
-I'd *love* to hear about it on that issues list.
+I'd love to hear about it on that issues list, would be delighted by patches,
+and would be happy to grant commit access to anyone who submits a working patch
+or two.
 
 
 Recognised ANSI Sequences
