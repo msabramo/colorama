@@ -228,7 +228,7 @@ The only ANSI sequences that colorama converts into win32 calls are::
     ESC [ 49 m      # reset
 
     # cursor positioning
-    ESC [ x;y H     # position cursor at x,y
+    ESC [ y;x H     # position cursor at x across, y down
 
     # clear the screen
     ESC [ mode J    # clear the screen. Only mode 2 (clear entire screen)
