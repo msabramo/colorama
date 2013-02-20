@@ -269,9 +269,9 @@ stdout, which confuses the unit tests.
 
 Thanks
 ======
-User 'stuyck', for suggesting Python3 compatible updates to README.
-Daniel Griffith for multiple fabulous patches.
-Oscar Lesta for valuable fix to stop ANSI chars being sent to non-tty output.
-Roger Binns, for many suggestions, valuable feedback, & bug reports.
-Tim Golden for thought and much appreciated feedback on the initial idea.
+| User 'stuyck', for suggesting Python3 compatible updates to README.
+| Daniel Griffith for multiple fabulous patches.
+| Oscar Lesta for valuable fix to stop ANSI chars being sent to non-tty output.
+| Roger Binns, for many suggestions, valuable feedback, & bug reports.
+| Tim Golden for thought and much appreciated feedback on the initial idea.
 
