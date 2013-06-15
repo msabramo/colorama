@@ -269,6 +269,7 @@ stdout, which confuses the unit tests.
 
 Thanks
 ======
+| Jesse@EmptySquare for submitting a fix for examples in the README.
 | User 'jamessp', an observant documentation fix for cursor positioning.
 | User 'vaal1239', Dave Mckee & Lackner Kristof for a tiny but much-needed Win7 fix.
 | Julien Stuyck, for wisely suggesting Python3 compatible updates to README.
