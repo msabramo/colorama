@@ -1,2 +1,5 @@
+glob:*.egg-info
+glob:dist
+glob:tags
 glob:virtualenv
 glob:MANIFEST

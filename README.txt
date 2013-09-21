@@ -41,11 +41,16 @@ These screengrabs show that Colorama on Windows does not support ANSI 'dim
 text': it looks the same as 'normal text'.
 
 
+License
+=======
+
+Copyright Jonathan Hartley 2013. BSD 3-Clause license, see LICENSE file.
+
+
 Dependencies
 ============
 
 None, other than Python. Tested on Python 2.5.5, 2.6.5, 2.7, 3.1.2, and 3.2
-
 
 Usage
 =====

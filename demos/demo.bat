@@ -1,10 +1,12 @@
+:: Copyright Jonathan Hartley 2013. BSD 3-Clause license, see LICENSE file.
 
-@rem Script to demonstrate features of colorama.
+:: Script to demonstrate features of colorama.
 
-@rem This demo is also used to verify correctness visually, because we don't have automated tests.
+:: This demo is also used to verify correctness visually, because we don't
+:: have automated tests.
 
-@rem Implemented as a bash script which invokes python so that we can test the
-@rem behaviour on exit, which resets default colors again.
+:: Implemented as a bash script which invokes python so that we can test the
+:: behaviour on exit, which resets default colors again.
 
 python demo01.py
 
