@@ -1,3 +1,13 @@
+0.2.6
+    Add copyright & licensing info to every file, as requested by a large
+    downstream project which has problems making sure that all 3rd party
+    contributions have appropriate license.
+0.2.5
+    Severeral documentation & demo fixes.
+0.2.4
+    Fix to work on Windows 7.
+    Python 3 compatibility in docs and demos.
+    Add handling for 'cursor up' and 'get position' ANSI codes.
 0.2.3
 	Split changelog out into separate file.
 0.2.2
