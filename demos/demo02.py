@@ -21,3 +21,5 @@ print(Style.DIM + 'dim, '
     + Style.BRIGHT + 'bright, '
     + Style.NORMAL + 'normal'
     , end=' ')
+print()
+
