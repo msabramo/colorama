@@ -177,16 +177,16 @@ init(wrap=True):
         stream = AnsiToWin32(sys.stderr).stream
 
         # Python 2
-        print >>stream, Fore.BLUE + 'blue text on stderr'    
+        print >>stream, Fore.BLUE + 'blue text on stderr'
 
         # Python 3
         print(Fore.BLUE + 'blue text on stderr', file=stream)
-        
+
 
 Status & Known Problems
 =======================
 
-I've personally only tested it on WinXP (CMD, Console2), Ubuntu 
+I've personally only tested it on WinXP (CMD, Console2), Ubuntu
 (gnome-terminal, xterm), and OSX.
 
 Some presumably valid ANSI sequences aren't recognised (see details below)
@@ -208,7 +208,7 @@ ANSI sequences generally take the form:
 
     ESC [ <param> ; <param> ... <command>
 
-Where <param> is an integer, and <command> is a single letter. Zero or more 
+Where <param> is an integer, and <command> is a single letter. Zero or more
 params are passed to a <command>. If no params are passed, it is generally
 synonymous with passing a single zero. No spaces exist in the sequence, they
 have just been inserted here to make it easy to read.
@@ -267,6 +267,8 @@ google code.
 Development
 ===========
 
+Help and fixes welcome! Ask Jonathan for commit rights, you'll get them.
+
 Running tests requires:
 
 - Michael Foord's 'mock' module to be installed.
@@ -282,8 +284,15 @@ The -s is required because 'nosetests' otherwise applies a proxy of its own to
 stdout, which confuses the unit tests.
 
 
+Contact
+=======
+
+Created by Jonathan Hartley, tartley@tartley.com
+
+
 Thanks
 ======
+| Ben Hoyt, for a magnificent fix under 64-bit Windows.
 | Jesse@EmptySquare for submitting a fix for examples in the README.
 | User 'jamessp', an observant documentation fix for cursor positioning.
 | User 'vaal1239', Dave Mckee & Lackner Kristof for a tiny but much-needed Win7 fix.

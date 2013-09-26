@@ -1,3 +1,7 @@
+0.2.7
+    Fix problem under 64-bit windows due to ctypes HANDLE size.
+    Submitted by the rather magnificent Ben Hoyt.
+    This fixes issue 43 (http://code.google.com/p/colorama/issues/detail?id=43)
 0.2.6
     Add copyright & licensing info to every file, as requested by a large
     downstream project which has problems making sure that all 3rd party
